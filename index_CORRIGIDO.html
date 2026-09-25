@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Desafio do Casal ❤️</title>
+<style>
+:root{
+  --bg1:#241326;--bg2:#7b245d;--card:#fff;--ink:#2b1830;--muted:#765f78;
+  --pink:#ff5f78;--pink2:#ff8ba0;--soft:#f7edf6;--green:#27b879;--yellow:#ffca3a;
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:Inter,Arial,sans-serif;color:var(--ink);
+background:radial-gradient(circle at 15% 10%,#b83f79 0,#0000 28%),linear-gradient(135deg,var(--bg1),var(--bg2));
+-webkit-tap-highlight-color:transparent}
+main{width:min(680px,100%);margin:auto;padding:16px}
+.card{background:rgba(255,255,255,.97);border-radius:28px;padding:22px;box-shadow:0 18px 50px #10071370;margin-top:12px}
+.hidden{display:none!important}
+.hero{text-align:center;padding:30px 20px 24px;overflow:hidden;position:relative}
+.hero:before{content:"";position:absolute;width:190px;height:190px;border-radius:50%;background:#ff5f7820;right:-65px;top:-65px}
+.logo{font-size:54px;line-height:1}
+h1{margin:10px 0 4px;font-size:34px;letter-spacing:-1px}
+h2{margin:8px 0 12px}
+.sub{color:var(--muted);margin:0 auto 18px;max-width:460px}
+input,button{font:inherit}
+input{width:100%;padding:15px 16px;border:2px solid #eadfea;border-radius:16px;outline:none;color:var(--ink);background:#fff}
+input:focus{border-color:var(--pink)}
+button{width:100%;border:0;border-radius:16px;padding:15px 16px;margin:6px 0;font-weight:800;cursor:pointer;transition:.15s transform,.15s opacity}
+button:active{transform:scale(.985)}
+.primary{background:linear-gradient(135deg,var(--pink),#ff718e);color:#fff}
+.secondary{background:#f0e9f0;color:var(--ink)}
+.ghost{background:transparent;color:var(--muted);border:1px solid #e2d7e2}
+.small{font-size:13px;color:var(--muted)}
+.msg{padding:12px 14px;border-radius:14px;background:#fff4cf;color:#654d00;margin-top:10px}
+.msg.ok{background:#dff7ea;color:#14613e}.msg.err{background:#ffe4e8;color:#8a2434}
+.sectionTitle{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.badge{background:var(--soft);padding:8px 11px;border-radius:99px;font-size:12px;font-weight:800}
+.code{font-size:38px;letter-spacing:7px;text-align:center;font-weight:900;margin:4px 0 10px}
+.players{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.player{background:var(--soft);padding:13px;border-radius:16px;text-align:center;font-weight:800}
+.player.me{outline:2px solid #ffb0bc}
+.menuGrid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.gameCard{background:linear-gradient(145deg,#fff,#f8eff7);border:1px solid #eadfea;color:var(--ink);text-align:left;min-height:130px;padding:17px}
+.gameCard .emoji{font-size:35px;display:block;margin-bottom:7px}
+.gameCard small{color:var(--muted);font-weight:600}
+.scoreRow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.scoreBox{background:var(--soft);border-radius:17px;padding:12px;text-align:center}
+.scoreBox b{font-size:25px}
+.turn{padding:12px;border-radius:15px;text-align:center;background:#fff0f3;font-weight:900;margin:10px 0}
+.question{font-size:23px;line-height:1.25}
+.option{text-align:left;background:#f4edf5;color:var(--ink);border:2px solid transparent}
+.option.selected{border-color:var(--pink);background:#ffe8ed}
+.option:disabled{opacity:.55}
+.words{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.word{background:#eee7ef;padding:8px 10px;border-radius:99px;font-size:13px;font-weight:800}
+.word.done{background:#c8f2dd;text-decoration:line-through;color:#166a48}
+.gridWrap{overflow:auto;border-radius:18px}
+.wordGrid{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;min-width:340px}
+.cell{aspect-ratio:1;border:0;background:#f1eaf2;color:#171017;border-radius:9px;padding:0;margin:0;font-weight:900;font-size:18px;touch-action:manipulation}
+.cell.start{outline:3px solid var(--pink)}
+.cell.selected{background:#ffd1da}
+.cell.found{background:#bfeecf;color:#155c40}
+.searchHint{font-size:13px;color:var(--muted);text-align:center;margin:8px 0}
+.drawRef{background:#fff;border:2px dashed #dccddd;border-radius:18px;padding:10px;text-align:center}
+.drawRef canvas,.drawCanvas{width:100%;max-width:520px;height:auto;display:block;margin:auto;border-radius:14px}
+.drawCanvas{background:#fff;border:2px solid #dfd4df;touch-action:none}
+.drawTools{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.resultDraw{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.resultDraw>div{background:#f7edf6;border-radius:16px;padding:8px;text-align:center;font-weight:800}
+.resultDraw canvas{width:100%;height:auto;background:#fff;border-radius:12px}
+.resultWinner{background:linear-gradient(135deg,#fff0b7,#ffe6ed);border-radius:18px;padding:17px;text-align:center;font-size:19px;font-weight:900;margin:12px 0}
+.dice{font-size:88px;text-align:center;line-height:1;margin:15px 0}
+.diceRoll{background:linear-gradient(135deg,#fff0b8,#ffd3df);border-radius:22px;padding:18px;text-align:center}
+.challenge{font-size:24px;line-height:1.3;background:#faf3f9;border-radius:18px;padding:20px;text-align:center;margin:12px 0}
+.challengeBtns{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.doneBtn{background:#ff647d;color:white}.notBtn{background:#eee7ef;color:var(--ink)}
+.backRow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:520px){
+  main{padding:9px}.card{border-radius:23px;padding:17px}.hero{padding:25px 15px}
+  h1{font-size:29px}.menuGrid{grid-template-columns:1fr}.players{grid-template-columns:1fr 1fr}
+  .cell{font-size:16px}.question{font-size:21px}
+}
+</style>
+</head>
+<body>
+<main>
+<section class="card hero" id="home">
+  <div class="logo">❤️</div>
+  <h1>Desafio do Casal</h1>
+  <p class="sub">Mini jogos para vocês se divertirem juntos, mesmo em celulares diferentes.</p>
+  <input id="name" maxlength="20" placeholder="Digite seu nome">
+  <button class="primary" onclick="createRoom()">✨ Criar uma sala</button>
+  <button class="secondary" onclick="showJoin()">🔑 Entrar com código</button>
+  <div id="joinBox" class="hidden">
+    <input id="codeInput" maxlength="6" placeholder="Código da sala" style="margin-top:8px;text-transform:uppercase">
+    <button class="primary" onclick="joinRoom()">Entrar na sala</button>
+  </div>
+  <div id="connectionStatus" class="small" style="margin-top:12px">🟡 Pronto para criar ou entrar em uma sala.</div><div id="homeMsg"></div>
+</section>
+
+<section class="card hidden" id="lobby">
+  <div class="sectionTitle"><span class="badge">SALA PRIVADA</span><span id="hostBadge" class="badge"></span></div>
+  <p class="small">Código para o outro jogador:</p>
+  <div class="code" id="roomCode">------</div>
+  <button class="secondary" onclick="copyCode()">📋 Copiar código</button>
+  <div class="players" id="players"></div>
+  <div id="lobbyMsg"></div>
+  <div id="menuArea" class="hidden">
+    <h2>🎮 Escolham um minijogo</h2>
+    <div class="menuGrid">
+      <button class="gameCard" onclick="chooseGame('quiz')"><span class="emoji">❓</span>Perguntas do casal<small>Acertem perguntas e somem pontos.</small></button>
+      <button class="gameCard" onclick="chooseGame('words')"><span class="emoji">🔤</span>Caça-palavras<small>Turnos alternados e disputa de tempo.</small></button>
+      <button class="gameCard" onclick="chooseGame('dice')"><span class="emoji">🎲</span>Dados<small>Rodadas alternadas e placar.</small></button>
+      <button class="gameCard" onclick="chooseGame('challenge')"><span class="emoji">💑</span>Desafios do casal<small>Façam os desafios e marquem o resultado.</small></button>
+      <button class="gameCard" onclick="chooseGame('draw')"><span class="emoji">🎨</span>Desenhe igual<small>Desenhem a mesma figura e comparem.</small></button>
+    </div>
+  </div>
+  <button class="ghost" onclick="goHome()">Sair da sala</button>
+</section>
+
+<section class="card hidden" id="game"></section>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig={
+ apiKey:"AIzaSyBAuo8w6KkYmi37iByjOQfzoLl7l2sYOLY",
+ authDomain:"desafio-do-casal-ccca5.firebaseapp.com",
+ projectId:"desafio-do-casal-ccca5",
+ storageBucket:"desafio-do-casal-ccca5.firebasestorage.app",
+ messagingSenderId:"406184390414",
+ appId:"1:406184390414:web:a22f6a98abf4dc5479b15f",
+ databaseURL:"https://desafio-do-casal-ccca5-default-rtdb.firebaseio.com/"
+};
+firebase.initializeApp(firebaseConfig);
+const db=firebase.database(),auth=firebase.auth();
+let uid="",room="",host=false,current=null,game="",localStart=0,drawCanvas=null,drawCtx=null,drawing=false;
+
+const questions=[
+ ["Qual seria o programa perfeito para uma noite sem planos?",["Filme e coberta","Sair juntos","Jogar juntos","Qualquer coisa juntos"],3],
+ ["Qual lugar vocês escolheriam para viajar?",["Praia","Serra","Cidade nova","Um lugar surpresa"],0],
+ ["Qual demonstração de carinho você mais gosta?",["Abraço","Beijo","Mensagem","Companhia"],1],
+ ["Qual combina mais com um encontro de vocês?",["Comida","Música","Filme","Passeio"],0],
+ ["Qual palavra combina mais com vocês?",["Amor","Parceria","Diversão","Todas"],3],
+ ["Quem esqueceria onde colocou o celular?",["Eu","Você","Os dois","Nenhum"],2]
+];
+const challenges=[
+ "Façam uma selfie fazendo a mesma careta.",
+ "Dê um abraço apertado no outro por 20 segundos.",
+ "Cada um diga uma coisa que admira no outro.",
+ "Dancem juntos durante uma música.",
+ "Façam uma foto imitando uma pose antiga.",
+ "Cada um diga seu momento favorito juntos.",
+ "Façam uma competição de pedra, papel e tesoura.",
+ "Cada um escreva uma qualidade do outro."
+];
+const diceFaces=["⚀","⚁","⚂","⚃","⚄","⚅"];
+const templates=["heart","house","star","cat"];
+
+let firebaseReady=false;
+auth.onAuthStateChanged(user=>{
+  if(user){ uid=user.uid; firebaseReady=true; const e=document.getElementById("connectionStatus"); if(e)e.innerHTML="🟢 Conectado"; }
+});
+async function ensureAuth(){
+  if(firebaseReady && auth.currentUser){
+    uid=auth.currentUser.uid;
+    return true;
+  }
+
+  const el=document.getElementById("connectionStatus");
+  if(el) el.innerHTML="🔄 Conectando...";
+
+  try{
+    const result = await Promise.race([
+      auth.currentUser
+        ? Promise.resolve({user:auth.currentUser})
+        : auth.signInAnonymously(),
+      new Promise((_,reject)=>setTimeout(
+        ()=>reject(new Error("Tempo esgotado ao conectar ao Firebase.")),8000
+      ))
+    ]);
+
+    uid=result.user.uid;
+    firebaseReady=true;
+    if(el) el.innerHTML="🟢 Conectado";
+    msg("homeMsg","Conexão pronta. Criando sua sala...");    
+    return true;
+  }catch(e){
+    firebaseReady=false;
+    if(el) el.innerHTML="🔴 Falha na conexão";
+    msg(
+      "homeMsg",
+      "<b>Não foi possível conectar.</b><br>"+
+      esc(e.message||"Erro desconhecido")+
+      "<br><small>Se aparecer \"auth/operation-not-allowed\", ative Anonymous em Firebase → Authentication → Sign-in method.</small>",
+      true
+    );
+    return false;
+  }
+}
+
+function msg(id,t,error=false){const e=document.getElementById(id);if(e)e.innerHTML=t?'<div class="msg '+(error?'err':'ok')+'">'+t+'</div>':''}
+function show(id){document.getElementById("home").classList.toggle("hidden",id!=="home");document.getElementById("lobby").classList.toggle("hidden",id!=="lobby");document.getElementById("game").classList.toggle("hidden",id!=="game")}
+function showJoin(){document.getElementById("joinBox").classList.remove("hidden")}
+function name(){return document.getElementById("name").value.trim()||"Jogador"}
+function code(){return Math.random().toString(36).slice(2,8).toUpperCase()}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+
+async function createRoom(){
+  const btn=document.querySelector('#home .primary');
+  if(btn) btn.disabled=true;
+  if(!(await ensureAuth())){
+    if(btn) btn.disabled=false;
+    return;
+  }
+  try{
+    room=code();host=true;
+    const player={name:name(),host:true};
+    await db.ref("rooms/"+room).set({host:uid,status:"lobby",createdAt:firebase.database.ServerValue.TIMESTAMP,players:{[uid]:player}});
+    listen();show("lobby");
+    if(btn) btn.disabled=false;
+  }catch(e){
+    host=false; room="";
+    msg("homeMsg","<b>Não foi possível criar a sala.</b><br>"+esc(e.message)+"<br><small>Verifique as regras do Realtime Database.</small>",true);
+    if(btn) btn.disabled=false;
+  }
+}
+async function joinRoom(){
+  if(!(await ensureAuth()))return;
+  room=document.getElementById("codeInput").value.trim().toUpperCase();
+  if(!/^[A-Z0-9]{6}$/.test(room))return msg("homeMsg","Digite o código de 6 caracteres.",true);
+  try{
+    const s=await db.ref("rooms/"+room).once("value");
+    if(!s.exists())return msg("homeMsg","Sala não encontrada.",true);
+    const p=s.val().players||{};
+    if(Object.keys(p).length>=2 && !p[uid])return msg("homeMsg","Essa sala já está cheia.",true);
+    host=!!(s.val().host===uid);
+    await db.ref("rooms/"+room+"/players/"+uid).set({name:name(),host:false});
+    listen();show("lobby");
+  }catch(e){
+    msg("homeMsg","<b>Não foi possível entrar na sala.</b><br>"+esc(e.message)+"<br><small>Verifique as regras do Realtime Database.</small>",true);
+  }
+}
+function listen(){
+ db.ref("rooms/"+room).off();
+ db.ref("rooms/"+room).on("value",snap=>{
+  current=snap.val(); if(!current)return;
+  renderLobby(current);
+  if(current.status==="game")renderGame(current);
+  if(current.status==="finished")renderFinished(current);
+ });
+}
+function renderLobby(d){
+ document.getElementById("roomCode").textContent=room;
+ const ps=Object.entries(d.players||{});
+ document.getElementById("players").innerHTML=ps.map(([id,p])=>'<div class="player '+(id===uid?'me':'')+'">'+(id===uid?'👤 ':'❤️ ')+esc(p.name)+(id===uid?' (você)':'')+'</div>').join("");
+ document.getElementById("hostBadge").textContent=d.host===uid?"VOCÊ É O HOST":"AGUARDANDO HOST";
+ const ready=ps.length===2;
+ document.getElementById("menuArea").classList.toggle("hidden",!ready||d.status!=="lobby");
+ msg("lobbyMsg",ready?"Os dois estão na sala. Escolham um minijogo!":"Aguardando o segundo jogador...",ready);
+}
+function copyCode(){navigator.clipboard?.writeText(room);msg("lobbyMsg","Código copiado! Envie para o outro jogador.");}
+async function chooseGame(g){
+  if(!host)return msg("lobbyMsg","Só quem criou a sala pode iniciar o jogo.",true);
+  try{
+    game=g;
+    const base={status:"game",game:g,round:0,answers:{},startedAt:firebase.database.ServerValue.TIMESTAMP};
+    if(g==="words")Object.assign(base,makeWordGame());
+    if(g==="dice")Object.assign(base,{round:0,turn:0,scores:{[uid]:0},rolls:{},roundStartedAt:firebase.database.ServerValue.TIMESTAMP});
+    if(g==="challenge")Object.assign(base,{round:0,responses:{}});
+    if(g==="draw")Object.assign(base,{round:0,template:templates[Math.floor(Math.random()*templates.length)],done:{},drawings:{}});
+    await db.ref("rooms/"+room).update(base);
+  }catch(e){msg("lobbyMsg","Erro ao iniciar o jogo: "+esc(e.message),true)}
+}
+function renderGame(d){
+ game=d.game;
+ const el=document.getElementById("game");
+ if(game==="quiz")renderQuiz(d);
+ if(game==="words")renderWords(d);
+ if(game==="dice")renderDice(d);
+ if(game==="challenge")renderChallenge(d);
+ if(game==="draw")renderDraw(d);
+}
+function gameHead(title,sub){return '<div class="sectionTitle"><h2>'+title+'</h2><span class="badge">'+sub+'</span></div>'}
+function backBtn(){return '<button class="ghost" onclick="backToLobby()">← Voltar para a sala</button>'}
+async function backToLobby(){if(!room)return;await db.ref("rooms/"+room).update({status:"lobby",game:null,answers:null,responses:null,drawings:null,done:null,rolls:null});show("lobby")}
+async function goHome(){if(room)db.ref("rooms/"+room).off();room="";host=false;show("home")}
+
+/* PERGUNTAS */
+function renderQuiz(d){
+ const i=d.round||0,ps=Object.entries(d.players||{}),me=d.players[uid]||{},other=ps.find(x=>x[0]!==uid)?.[1]||{};
+ if(i>=questions.length){finishQuiz(d);return}
+ document.getElementById("game").innerHTML=gameHead("❓ Perguntas do casal","Rodada "+(i+1)+"/"+questions.length)+
+ '<div class="scoreRow"><div class="scoreBox">Você<br><b>'+(me.score||0)+'</b></div><div class="scoreBox">Outro<br><b>'+(other.score||0)+'</b></div></div>'+
+ '<div class="question">'+esc(questions[i][0])+'</div>'+
+ questions[i][1].map((o,n)=>'<button class="option" '+(d.answers?.[i]?.[uid]?'disabled':'')+' onclick="answerQuiz('+n+')">'+String.fromCharCode(65+n)+' — '+esc(o)+'</button>').join("")+
+ '<div id="quizMsg"></div>'+backBtn();
+ msg("quizMsg",d.answers?.[i]?.[uid]?"Resposta registrada. Aguardando o outro jogador...":"Escolha uma resposta.");
+}
+async function answerQuiz(n){
+ const d=(await db.ref("rooms/"+room).once("value")).val(),i=d.round||0;
+ if(d.answers?.[i]?.[uid])return;
+ await db.ref("rooms/"+room+"/answers/"+i+"/"+uid).set({choice:n,correct:n===questions[i][2]});
+ if(n===questions[i][2])await db.ref("rooms/"+room+"/players/"+uid+"/score").transaction(v=>(v||0)+1);
+ const s=(await db.ref("rooms/"+room).once("value")).val(),a=s.answers?.[i]||{};
+ if(Object.keys(a).length===2){
+  if(i+1<questions.length)await db.ref("rooms/"+room).update({round:i+1,answers:{}});
+  else await db.ref("rooms/"+room).update({status:"finished",resultType:"quiz"});
+ }
+}
+function finishQuiz(d){
+ const ps=Object.values(d.players||{});document.getElementById("game").innerHTML='<div class="resultWinner">🎉 Perguntas concluídas!</div>'+
+ ps.map(p=>'<div class="scoreBox">'+esc(p.name)+'<br><b>'+((p.score)||0)+' ponto(s)</b></div>').join("")+
+ '<button class="primary" onclick="backToLobby()">🎮 Escolher outro jogo</button>';
+}
+
+/* CAÇA-PALAVRAS */
+function makeWordGame(){
+ const words=["AMOR","BEIJO","PRAIA","VIDA","CASAL","CARINHO"];
+ const size=8,grid=Array(size*size).fill("");
+ const placements=[
+  ["AMOR",0,0,0,1],["BEIJO",1,1,1,1],["PRAIA",6,2,6,1],
+  ["VIDA",0,7,1,0],["CASAL",7,0,0,1],["CARINHO",2,2,2,1]
+ ];
+ placements.forEach(([w,r,c,dr,dc])=>[...w].forEach((ch,k)=>grid[(r+dr*k)*size+(c+dc*k)]=ch));
+ const letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+ for(let i=0;i<grid.length;i++)if(!grid[i])grid[i]=letters[Math.floor(Math.random()*letters.length)];
+ return {wordGrid:grid.join(""),words,found:{},turn:0,startedAt:firebase.database.ServerValue.TIMESTAMP,foundAt:{}};
+}
+function renderWords(d){
+ const words=d.words||["AMOR","BEIJO","PRAIA","VIDA","CASAL","CARINHO"],turn=d.turn||0;
+ const ids=Object.keys(d.players||{}),turnUid=ids[turn%2],myTurn=turnUid===uid;
+ let cells=(d.wordGrid||"").split("").map((ch,i)=>'<button class="cell '+(d.found?.[i]?'found':'')+'" '+(!myTurn||d.found?.[i]?'disabled':'')+' onclick="wordTap('+i+')">'+ch+'</button>').join("");
+ const foundWords=Object.keys(d.foundWords||{});
+ const all=foundWords.length===words.length;
+ document.getElementById("game").innerHTML=gameHead("🔤 Caça-palavras","6 palavras")+
+ '<div class="turn">'+(all?"🏁 Partida encerrada!":myTurn?"🟢 Sua vez de marcar":"🟣 Vez do outro jogador")+'</div>'+
+ '<div class="words">'+words.map(w=>'<span class="word '+(foundWords.includes(w)?'done':'')+'">'+w+'</span>').join("")+'</div>'+
+ '<div class="searchHint">Toque na primeira e na última letra. Pode ser horizontal ou vertical.</div>'+
+ '<div class="gridWrap"><div class="wordGrid">'+cells+'</div></div>'+
+ (all?wordResult(d):'<div id="wordMsg"></div>')+backBtn();
+ if(!all)msg("wordMsg",myTurn?"Encontre uma palavra e marque as duas letras.":"Aguarde sua vez.");
+}
+let wordFirst=null;
+async function wordTap(i){
+ const d=(await db.ref("rooms/"+room).once("value")).val(),ids=Object.keys(d.players||{}),turnUid=ids[(d.turn||0)%2];
+ if(turnUid!==uid||d.found?.[i])return;
+ if(wordFirst===null){wordFirst=i;renderWords({...d,found:{...(d.found||{}),[i]:true}});return;}
+ const a=wordFirst,b=i;wordFirst=null;
+ const r1=Math.floor(a/8),c1=a%8,r2=Math.floor(b/8),c2=b%8;
+ let matched=null;
+ for(const w of d.words||[]){
+  if(d.foundWords?.[w])continue;
+  for(let rev=0;rev<2;rev++){
+   const start=rev?b:a,end=rev?a:b,sr=Math.floor(start/8),sc=start%8,er=Math.floor(end/8),ec=end%8;
+   if(sr===er||sc===ec){
+    const dr=Math.sign(er-sr),dc=Math.sign(ec-sc),len=w.length;
+    let s="";
+    for(let k=0;k<len;k++){let rr=sr+dr*k,cc=sc+dc*k;s+=(d.wordGrid||"")[rr*8+cc]||""}
+    if(s===w)matched=w;
+   }
+  }
+ }
+ if(!matched){return renderWords(d)}
+ const updates={};
+ updates["found/"+a]=true;updates["found/"+b]=true;updates["foundWords/"+matched]=uid;
+ updates["foundBy/"+matched]=uid;
+ updates["turn"]=(d.turn||0)+1;
+ updates["foundAt/"+matched]=firebase.database.ServerValue.TIMESTAMP;
+ await db.ref("rooms/"+room).update(updates);
+ const s=(await db.ref("rooms/"+room).once("value")).val();
+ const foundBy=s.foundBy||{};
+ const myCount=Object.values(foundBy).filter(x=>x===uid).length;
+ const totalWords=(s.words||[]).length;
+ if(myCount===totalWords && !s.completedAt?.[uid]) {
+   await db.ref("rooms/"+room+"/completedAt/"+uid).set(firebase.database.ServerValue.TIMESTAMP);
+ }
+ const s2=(await db.ref("rooms/"+room).once("value")).val();
+ if(Object.keys(s2.foundWords||{}).length===totalWords){
+   await db.ref("rooms/"+room).update({status:"finished",resultType:"words",finishedAt:firebase.database.ServerValue.TIMESTAMP});
+ }
+}
+function wordResult(d){
+ const ids=Object.keys(d.players||{}),found=d.foundBy||{},counts={};
+ ids.forEach(id=>counts[id]=0);
+ Object.values(found).forEach(id=>counts[id]=(counts[id]||0)+1);
+ const completed=d.completedAt||{};
+ const ordered=ids.filter(id=>completed[id]).sort((a,b)=>completed[a]-completed[b]);
+ const winner=ordered[0];
+ const names=ids.map(id=>d.players[id].name+" — "+(counts[id]||0)+" palavra(s)");
+ return '<div class="resultWinner">'+(winner?'🏆 '+esc(d.players[winner].name)+' terminou sua parte primeiro!':'🏁 Todas as palavras foram encontradas!')+'</div>'+
+ names.map(x=>'<div class="scoreBox">'+esc(x)+'</div>').join("")+
+ '<p class="small">A vez alterna a cada palavra encontrada. O tempo é registrado automaticamente para comparar quem completou todas as palavras que encontrou primeiro.</p>';
+}
+
+/* DADOS */
+function renderDice(d){
+ const ids=Object.keys(d.players||{}),turnUid=ids[(d.turn||0)%2],my=turnUid===uid;
+ const scores=d.scores||{};
+ document.getElementById("game").innerHTML=gameHead("🎲 Dados","5 rodadas")+
+ '<div class="scoreRow">'+ids.map(id=>'<div class="scoreBox">'+esc(d.players[id].name)+'<br><b>'+(scores[id]||0)+'</b></div>').join("")+'</div>'+
+ '<div class="turn">'+(d.round>=5?"🏁 Fim das rodadas":my?"🟢 Sua vez de jogar":"🟣 Vez do outro jogador")+'</div>'+
+ '<div class="diceRoll"><div class="dice">'+(d.lastFace||"🎲")+'</div><b>'+(d.lastName?esc(d.lastName)+" tirou "+(d.lastValue||""):"Role o dado!")+'</b></div>'+
+ (d.round>=5?'<div class="resultWinner">🏆 Resultado final: '+winnerDice(d)+'</div>':my?'<button class="primary" onclick="rollDice()">🎲 Rolar dado</button>':'<p class="small" style="text-align:center">Aguarde o outro jogador...</p>')+backBtn();
+}
+function winnerDice(d){
+ const ids=Object.keys(d.players||{}),a=d.scores?.[ids[0]]||0,b=d.scores?.[ids[1]]||0;
+ if(a===b)return "🤝 Empate!";
+ return esc(d.players[a>b?ids[0]:ids[1]].name)+" venceu!";
+}
+async function rollDice(){
+ const d=(await db.ref("rooms/"+room).once("value")).val(),ids=Object.keys(d.players||{});
+ if(ids[(d.turn||0)%2]!==uid||d.round>=5)return;
+ const n=1+Math.floor(Math.random()*6),updates={lastFace:diceFaces[n-1],lastValue:n,lastName:d.players[uid].name};
+ updates["scores/"+uid]=(d.scores?.[uid]||0)+n;
+ updates.turn=(d.turn||0)+1;
+ updates.round=Math.floor((d.turn||0)/2)+1;
+ if(updates.round>=5)updates.status="finished",updates.resultType="dice";
+ await db.ref("rooms/"+room).update(updates);
+}
+
+/* DESAFIOS */
+function renderChallenge(d){
+ const i=d.round||0,ids=Object.keys(d.players||{}),responses=d.responses?.[i]||{},mine=responses[uid];
+ const both=Object.keys(responses).length===2;
+ const myDone=responses[uid]==="done"?1:0;
+ const otherId=ids.find(id=>id!==uid),otherDone=responses[otherId]==="done"?1:0;
+ document.getElementById("game").innerHTML=gameHead("💑 Desafios do casal","Desafio "+(i+1)+"/"+challenges.length)+
+ '<div class="challenge">💗 '+challenges[i]+'</div>'+
+ '<div class="scoreRow"><div class="scoreBox">Você<br><b>'+myDone+'</b></div><div class="scoreBox">Outro<br><b>'+otherDone+'</b></div></div>'+
+ (mine?'<div class="turn">Resposta registrada: '+(mine==="done"?"✅ Eu fiz!":"❌ Não fiz")+'</div>':
+ '<div class="challengeBtns"><button class="doneBtn" onclick="challengeAnswer(\\'done\\')">✅ Eu fiz!</button><button class="notBtn" onclick="challengeAnswer(\\'no\\')">❌ Não fiz</button></div>')+
+ (both&&i+1<challenges.length?'<p class="small" style="text-align:center">Próximo desafio em instantes...</p>':'')+
+ '<div id="challengeMsg"></div>'+backBtn();
+ if(both&&i+1<challenges.length)setTimeout(async()=>{const s=(await db.ref("rooms/"+room).once("value")).val();if((s.round||0)===i)await db.ref("rooms/"+room).update({round:i+1,responses:{}})},700);
+ if(both&&i+1>=challenges.length)setTimeout(()=>db.ref("rooms/"+room).update({status:"finished",resultType:"challenge"}),700);
+}
+async function challengeAnswer(v){
+ const d=(await db.ref("rooms/"+room).once("value")).val(),i=d.round||0;
+ if(d.responses?.[i]?.[uid])return;
+ await db.ref("rooms/"+room+"/responses/"+i+"/"+uid).set(v);
+}
+
+/* DESENHO */
+function renderDraw(d){
+ const ids=Object.keys(d.players||{}),mine=d.done?.[uid],both=ids.every(id=>d.done?.[id]);
+ const labels={heart:"❤️ Coração",house:"🏠 Casa",star:"⭐ Estrela",cat:"🐱 Gato"};
+ document.getElementById("game").innerHTML=gameHead("🎨 Desenhe igual",labels[d.template]||"Desenho")+
+ '<div class="drawRef">Modelo:<canvas id="refCanvas" width="520" height="300"></canvas></div>'+
+ '<p class="turn">'+(both?"🎉 Os dois terminaram!":"Desenhe o modelo e toque em “Terminei” quando acabar.")+'</p>'+
+ (both?drawResults(d):'<canvas id="drawCanvas" class="drawCanvas" width="520" height="300"></canvas><div class="drawTools"><button class="secondary" onclick="clearDrawing()">🧹 Limpar</button><button class="primary" onclick="finishDrawing()">✅ Terminei</button></div>')+
+ '<div id="drawMsg"></div>'+backBtn();
+ drawCanvas=document.getElementById("drawCanvas");
+ if(drawCanvas){drawCtx=drawCanvas.getContext("2d");setupDraw();restoreOwnDrawing(d.drawings?.[uid]);}
+ const ref=document.getElementById("refCanvas");drawReference(ref,d.template);
+}
+function drawReference(canvas,type){
+ const c=canvas.getContext("2d");c.clearRect(0,0,canvas.width,canvas.height);c.strokeStyle="#2b1830";c.lineWidth=12;c.lineCap="round";c.lineJoin="round";c.fillStyle="#ff8ba0";
+ c.beginPath();
+ if(type==="heart"){c.moveTo(260,235);c.bezierCurveTo(110,140,120,45,205,65);c.bezierCurveTo(250,75,260,110,260,110);c.bezierCurveTo(260,110,270,75,315,65);c.bezierCurveTo(400,45,410,140,260,235);c.fill();c.stroke();}
+ if(type==="house"){c.moveTo(120,150);c.lineTo(260,45);c.lineTo(400,150);c.lineTo(370,150);c.lineTo(370,250);c.lineTo(150,250);c.lineTo(150,150);c.closePath();c.fill();c.stroke();c.strokeRect(235,180,50,70);}
+ if(type==="star"){c.beginPath();for(let i=0;i<10;i++){let a=-Math.PI/2+i*Math.PI/5,r=i%2?70:145,x=260+Math.cos(a)*r,y=150+Math.sin(a)*r;i?c.lineTo(x,y):c.moveTo(x,y)}c.closePath();c.fill();c.stroke();}
+ if(type==="cat"){c.arc(260,160,90,0,Math.PI*2);c.stroke();c.moveTo(195,100);c.lineTo(185,40);c.lineTo(230,80);c.moveTo(325,100);c.lineTo(335,40);c.lineTo(290,80);c.stroke();c.beginPath();c.arc(225,150,8,0,7);c.arc(295,150,8,0,7);c.fill();c.moveTo(250,180);c.lineTo(260,188);c.lineTo(270,180);c.stroke();}
+}
+function setupDraw(){
+ drawCanvas.onpointerdown=e=>{drawing=true;drawCtx.beginPath();drawCtx.moveTo(...pos(e));};
+ drawCanvas.onpointermove=e=>{if(!drawing)return;drawCtx.lineTo(...pos(e));drawCtx.strokeStyle="#2b1830";drawCtx.lineWidth=7;drawCtx.lineCap="round";drawCtx.stroke();};
+ ["pointerup","pointercancel","pointerleave"].forEach(ev=>drawCanvas.addEventListener(ev,()=>drawing=false));
+}
+function pos(e){const r=drawCanvas.getBoundingClientRect();return [(e.clientX-r.left)*drawCanvas.width/r.width,(e.clientY-r.top)*drawCanvas.height/r.height]}
+function clearDrawing(){if(!drawCanvas)return;drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height)}
+function restoreOwnDrawing(data){if(!data||!drawCanvas)return;const im=new Image();im.onload=()=>drawCtx.drawImage(im,0,0);im.src=data}
+async function finishDrawing(){
+ if(!drawCanvas)return;
+ const data=drawCanvas.toDataURL("image/png");
+ await db.ref("rooms/"+room+"/drawings/"+uid).set(data);
+ await db.ref("rooms/"+room+"/done/"+uid).set(true);
+ msg("drawMsg","Desenho enviado! Aguarde o outro jogador.");
+}
+function similarity(dataUrl,type){
+ const a=document.createElement("canvas"),b=document.createElement("canvas");a.width=b.width=520;a.height=b.height=300;
+ const ac=a.getContext("2d"),bc=b.getContext("2d");const im=new Image();im.src=dataUrl;
+ drawReference(b,type);
+ return new Promise(resolve=>{im.onload=()=>{ac.drawImage(im,0,0);const A=ac.getImageData(0,0,520,300).data,B=bc.getImageData(0,0,520,300).data;let score=0,total=0;for(let i=3;i<A.length;i+=4){const aa=A[i]>30,bb=B[i]>30;if(aa||bb){total++;if(aa===bb)score++}}resolve(total?Math.round(score/total*100):0)}})
+}
+async function drawResults(d){
+ const ids=Object.keys(d.players||{}),vals=[];
+ for(const id of ids)vals.push({id,name:d.players[id].name,score:await similarity(d.drawings[id],d.template)});
+ vals.sort((a,b)=>b.score-a.score);
+ const ref=document.createElement("canvas");ref.width=520;ref.height=300;drawReference(ref,d.template);
+ document.getElementById("game").innerHTML=gameHead("🎨 Resultado","Desenho")+
+ '<div class="resultWinner">'+(vals[0].score===vals[1].score?"🤝 Empate!":'🏆 '+esc(vals[0].name)+' ficou mais parecido!')+'<br><span class="small">A comparação é automática pelos traços do desenho.</span></div>'+
+ '<div class="resultDraw">'+vals.map(v=>'<div>'+esc(v.name)+'<br><b>'+v.score+'%</b><canvas id="r_'+v.id+'" width="520" height="300"></canvas></div>').join("")+'</div>'+
+ '<button class="primary" onclick="backToLobby()">🎮 Jogar outro minijogo</button>';
+ vals.forEach(v=>{const c=document.getElementById("r_"+v.id),x=c.getContext("2d"),im=new Image();im.onload=()=>x.drawImage(im,0,0);im.src=d.drawings[v.id]});
+}
+function renderFinished(d){
+ if(d.resultType==="draw")return;
+ if(d.status!=="finished")return;
+ if(d.resultType==="challenge"){
+  const ps=Object.values(d.players||{});document.getElementById("game").innerHTML=gameHead("💑 Desafios concluídos","Fim")+
+  '<div class="resultWinner">❤️ Vocês terminaram os desafios!</div><button class="primary" onclick="backToLobby()">🎮 Escolher outro jogo</button>';show("game");
+ } else if(d.resultType==="words"||d.resultType==="quiz"||d.resultType==="dice"){renderGame(d);show("game")}
+}
+</script>
+</body>
+</html>
