@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Desafio do Casal ❤️</title>
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#29152f,#64264d);color:#fff}
+main{max-width:560px;margin:auto;padding:20px}.card{background:#fff;color:#2d1831;border-radius:24px;padding:22px;margin-top:18px}
+h1{font-size:34px}.sub{color:#755d73}button,input{width:100%;padding:15px;margin:7px 0;border-radius:14px;border:0;font-size:16px;box-sizing:border-box}button{background:#ff7565;color:white;font-weight:bold}button.alt{background:#eee;color:#321d36}.code{text-align:center;font-size:38px;font-weight:bold;letter-spacing:7px}.score{display:flex;gap:10px}.score div{flex:1;background:#f7eaf3;padding:12px;border-radius:14px}.option{text-align:left;background:#f4edf5;color:#2d1831}.hidden{display:none}.msg{padding:12px;border-radius:12px;background:#fff0bf;color:#5a4300}.ok{background:#dff6e7;color:#17552d}.small{opacity:.7;font-size:13px}
+</style>
+</head>
+<body><main>
+<div class="card" id="home"><h1>❤️ Desafio do Casal</h1><p class="sub">Até onde vai a sintonia?</p>
+<input id="name" placeholder="Seu nome" maxlength="20">
+<button onclick="createRoom()">Criar uma sala</button><button class="alt" onclick="document.getElementById('join').classList.remove('hidden')">Entrar com código</button>
+<div id="join" class="hidden"><input id="codeInput" placeholder="Código de 6 caracteres" maxlength="6"><button onclick="joinRoom()">Entrar</button></div><div id="homeMsg"></div></div>
+<div class="card hidden" id="lobby"><p class="small">CÓDIGO DA SALA</p><div class="code" id="code"></div><p>Envie este código para sua namorada.</p><div id="players"></div><button id="start" onclick="startGame()">Começar partida</button><button class="alt" onclick="copyCode()">Copiar código</button><div id="lobbyMsg"></div></div>
+<div class="card hidden" id="game"><div class="score"><div>Você<br><b id="me">0</b></div><div>Outro jogador<br><b id="other">0</b></div></div><p class="small" id="round"></p><h2 id="question"></h2><div id="options"></div><div id="gameMsg"></div></div>
+<div class="card hidden" id="result"><h1>Resultado ❤️</h1><div id="resultText"></div><button onclick="location.reload()">Jogar novamente</button></div>
+</main>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script>
+const cfg={apiKey:"AIzaSyBAuo8w6KkYmi37iByjOQfzoLl7l2sYOLY",authDomain:"desafio-do-casal-ccca5.firebaseapp.com",projectId:"desafio-do-casal-ccca5",storageBucket:"desafio-do-casal-ccca5.firebasestorage.app",messagingSenderId:"406184390414",appId:"1:406184390414:web:a22f6a98abf4dc5479b15f",databaseURL:"https://desafio-do-casal-ccca5-default-rtdb.firebaseio.com/"};
+firebase.initializeApp(cfg);const db=firebase.database(),auth=firebase.auth();let uid,room,host=false;
+const qs=[
+["Qual seria o programa perfeito para uma noite sem planos?",["Filme e coberta","Sair juntos","Jogar juntos","Qualquer coisa juntos"],3],
+["Qual lugar vocês escolheriam para viajar?",["Praia","Serra","Cidade nova","Um lugar surpresa"],0],
+["Qual demonstração de carinho você mais gosta?",["Abraço","Beijo","Mensagem","Companhia"],1],
+["Quem manda mais mensagens?",["Eu","Você","Os dois","Depende"],2],
+["Qual combina mais com um encontro de vocês?",["Comida","Música","Filme","Passeio"],0],
+["Se ganhassem uma viagem agora?",["Praia","Europa","Interior","Qualquer lugar juntos"],3],
+["Qual palavra combina com vocês?",["Amor","Parceria","Diversão","Todas"],3],
+["Quem esqueceria onde colocou o celular?",["Eu","Você","Os dois","Nenhum"],2]
+];
+function show(x){["home","lobby","game","result"].forEach(id=>document.getElementById(id).classList.toggle("hidden",id!==x))}
+function notice(id,t,ok=false){document.getElementById(id).innerHTML=t?`<div class="msg ${ok?"ok":""}">${t}</div>`:""}
+function nm(){return document.getElementById("name").value.trim()||"Jogador"}
+auth.signInAnonymously().then(x=>uid=x.user.uid).catch(e=>notice("homeMsg","Erro no Firebase: "+e.message));
+function gen(){return Math.random().toString(36).slice(2,8).toUpperCase()}
+async function createRoom(){if(!uid)return notice("homeMsg","Aguarde o Firebase conectar.");room=gen();host=true;await db.ref("rooms/"+room).set({host:uid,status:"lobby",index:0,players:{[uid]:{name:nm(),score:0,host:true}}});listen();show("lobby")}
+async function joinRoom(){if(!uid)return notice("homeMsg","Aguarde o Firebase conectar.");room=document.getElementById("codeInput").value.trim().toUpperCase();let s=await db.ref("rooms/"+room).once("value");if(!s.exists())return notice("homeMsg","Sala não encontrada.");let p=s.val().players||{};if(Object.keys(p).length>=2)return notice("homeMsg","Sala cheia.");await db.ref("rooms/"+room+"/players/"+uid).set({name:nm(),score:0,host:false});listen();show("lobby")}
+function listen(){db.ref("rooms/"+room).on("value",s=>{let d=s.val();if(!d)return;renderLobby(d);if(d.status==="playing")renderGame(d);if(d.status==="finished")renderResult(d)})}
+function renderLobby(d){document.getElementById("code").textContent=room;let p=Object.values(d.players||{});document.getElementById("players").innerHTML=p.map(x=>"❤️ "+x.name).join("<br>");document.getElementById("start").style.display=host&&p.length===2?"block":"none";notice("lobbyMsg",p.length===2?"Os dois estão prontos!":"Aguardando o segundo jogador...",p.length===2)}
+async function startGame(){await db.ref("rooms/"+room).update({status:"playing",index:0,answers:{}})}
+function renderGame(d){show("game");let i=d.index||0;if(i>=qs.length)return;document.getElementById("round").textContent=`Rodada ${i+1} / ${qs.length}`;document.getElementById("question").textContent=qs[i][0];let ps=Object.entries(d.players||{}),me=d.players[uid],ot=ps.find(x=>x[0]!==uid);document.getElementById("me").textContent=me?.score||0;document.getElementById("other").textContent=ot?.[1]?.score||0;let answered=d.answers?.[i]?.[uid];document.getElementById("options").innerHTML=qs[i][1].map((o,n)=>`<button class="option" ${answered?"disabled":""} onclick="answer(${n})">${String.fromCharCode(65+n)} — ${o}</button>`).join("");notice("gameMsg",answered?"Resposta registrada. Aguardando o outro jogador...":"Escolha uma resposta.",!!answered)}
+async function answer(n){let s=await db.ref("rooms/"+room).once("value"),d=s.val(),i=d.index||0;if(d.answers?.[i]?.[uid])return;let correct=n===qs[i][2];await db.ref(`rooms/${room}/answers/${i}/${uid}`).set({choice:n,correct:correct});if(correct)await db.ref(`rooms/${room}/players/${uid}/score`).transaction(v=>(v||0)+1);s=await db.ref(`rooms/${room}/answers/${i}`).once("value");if(Object.keys(s.val()||{}).length===2){if(i+1<qs.length)await db.ref("rooms/"+room).update({index:i+1});else await db.ref("rooms/"+room).update({status:"finished"})}}
+function renderResult(d){show("result");let p=Object.values(d.players||{});document.getElementById("resultText").innerHTML=p.map(x=>`<p><b>${x.name}</b>: ${x.score||0} pontos</p>`).join("")}
+function copyCode(){navigator.clipboard?.writeText(room);notice("lobbyMsg","Código copiado!",true)}
+</script></body></html>
