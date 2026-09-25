@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Desafio do Casal ❤️</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#29152f,#64264d);color:#fff;min-height:100vh}main{max-width:620px;margin:auto;padding:14px}.card{background:#fff;color:#2d1831;border-radius:24px;padding:20px;margin-top:14px;box-shadow:0 12px 30px #160b1c55}h1{font-size:32px;margin:4px 0 8px}.sub{color:#755d73;margin-top:0}button,input{width:100%;padding:15px;margin:6px 0;border-radius:14px;border:0;font-size:16px;box-sizing:border-box}button{background:#ff7565;color:#fff;font-weight:bold;cursor:pointer}button.alt{background:#eee;color:#321d36}.hidden{display:none!important}.code{text-align:center;font-size:38px;font-weight:bold;letter-spacing:7px}.score{display:flex;gap:10px}.score div{flex:1;background:#f7eaf3;padding:12px;border-radius:14px;text-align:center}.option{text-align:left;background:#f4edf5;color:#2d1831}.option:disabled{opacity:.6}.msg{padding:12px;border-radius:12px;background:#fff0bf;color:#5a4300;margin-top:8px}.ok{background:#dff6e7;color:#17552d}.small{opacity:.7;font-size:13px}.modegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mode{background:#f4edf5;color:#321d36;min-height:110px}.mode span{font-size:34px;display:block;margin-bottom:5px}.mode.selected{outline:4px solid #ff7565;background:#ffe7e3}.back{background:transparent;color:#755d73;border:1px solid #ddd}.winner{font-size:22px;text-align:center}.runnerWrap{padding:0!important;overflow:hidden;background:#101522;color:#fff}.runnerTop{padding:15px}.runnerHud{display:flex;justify-content:space-between;gap:8px;font-weight:bold}.runnerHud div{background:#20283a;padding:8px 10px;border-radius:10px;flex:1;text-align:center}.progress{height:9px;background:#20283a;border-radius:99px;overflow:hidden;margin-top:10px}.progress i{display:block;height:100%;width:0;background:#ffd34d;border-radius:99px;transition:width .15s}.power{font-size:12px;margin-top:7px;text-align:center;color:#ffe58a}.shake{animation:shake .22s linear 2}@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}.canvasBox{position:relative;background:#8bd4ff}.canvasBox canvas{display:block;width:100%;height:auto}.controls{display:flex;gap:10px;padding:12px;background:#101522}.ctrl{height:70px;font-size:25px;margin:0;touch-action:none;user-select:none}.jump{flex:1;background:#ff7565}.left,.right{width:70px;background:#293348}.hint{text-align:center;font-size:12px;opacity:.75;padding:0 12px 12px}.modeTitle{text-align:center;font-size:24px;font-weight:bold;margin:4px 0 12px}.resultList p{background:#f7eaf3;padding:12px;border-radius:12px}.danger{color:#9c2734}.success{color:#176536}
+@media(max-width:420px){h1{font-size:28px}.code{font-size:34px}.modegrid{grid-template-columns:1fr}.ctrl{height:64px}}
+</style>
+</head>
+<body><main>
+<div class="card" id="home"><h1>❤️ Desafio do Casal</h1><p class="sub">Até onde vai a sintonia?</p>
+<input id="name" placeholder="Seu nome" maxlength="20">
+<button onclick="createRoom()">Criar uma sala</button><button class="alt" onclick="document.getElementById('join').classList.remove('hidden')">Entrar com código</button>
+<div id="join" class="hidden"><input id="codeInput" placeholder="Código de 6 caracteres" maxlength="6"><button onclick="joinRoom()">Entrar</button></div><div id="homeMsg"></div></div>
+
+<div class="card hidden" id="lobby"><p class="small">CÓDIGO DA SALA</p><div class="code" id="code"></div><p>Envie este código para sua namorada.</p><div id="players"></div>
+<div id="modeChooser" class="hidden"><p class="modeTitle">Escolham o jogo ❤️</p><div class="modegrid"><button class="mode selected" id="quizMode" onclick="selectMode('quiz')"><span>❓</span>Perguntas<br><small>Acertos e erros</small></button><button class="mode" id="runMode" onclick="selectMode('runner')"><span>🏃</span>Corrida retrô<br><small>Quem vai mais longe?</small></button></div><button id="start" onclick="startSelectedGame()">Começar partida</button></div>
+<button class="alt" onclick="copyCode()">Copiar código</button><div id="lobbyMsg"></div></div>
+
+<div class="card hidden" id="game"><div class="score"><div>Você<br><b id="me">0</b></div><div>Outro jogador<br><b id="other">0</b></div></div><p class="small" id="round"></p><h2 id="question"></h2><div id="options"></div><div id="gameMsg"></div></div>
+
+<div class="card runnerWrap hidden" id="runner"><div class="runnerTop"><div class="runnerHud"><div>🏃 Você<br><b id="runMe">0 m</b></div><div>💨 Outro<br><b id="runOther">0 m</b></div><div>⏱️ Tempo<br><b id="runTime">90</b>s</div></div><div class="progress"><i id="runProgress"></i></div><div class="power" id="powerText">❤️❤️❤️ &nbsp; 🪙 0 &nbsp; ⭐ 0</div></div><div class="canvasBox" id="canvasBox"><canvas id="canvas" width="900" height="430"></canvas></div><div class="controls"><button class="ctrl left" id="leftBtn">◀</button><button class="ctrl jump" id="jumpBtn">⬆ PULAR</button><button class="ctrl right" id="rightBtn">▶</button></div><div class="hint">🏃 Corra • 🪙 pegue moedas • ⭐ pegue estrelas • ❤️ evite obstáculos • ⚡ turbo deixa você mais rápido!<br><b>Quem conseguir chegar mais longe antes de perder as 3 vidas vence.</b></div><div id="runnerMsg" class="runnerTop"></div></div>
+
+<div class="card hidden" id="result"><h1 id="resultTitle">Resultado ❤️</h1><div id="resultText" class="resultList"></div><button onclick="location.reload()">Voltar ao início</button></div>
+</main>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script>
+const cfg={apiKey:"AIzaSyBAuo8w6KkYmi37iByjOQfzoLl7l2sYOLY",authDomain:"desafio-do-casal-ccca5.firebaseapp.com",projectId:"desafio-do-casal-ccca5",storageBucket:"desafio-do-casal-ccca5.firebasestorage.app",messagingSenderId:"406184390414",appId:"1:406184390414:web:a22f6a98abf4dc5479b15f",databaseURL:"https://desafio-do-casal-ccca5-default-rtdb.firebaseio.com/"};
+firebase.initializeApp(cfg);const db=firebase.database(),auth=firebase.auth();let uid,room,host=false,selectedMode='quiz',currentData=null,answerLock=false;
+const qs=[
+["Qual seria o programa perfeito para uma noite sem planos?",["Filme e coberta","Sair juntos","Jogar juntos","Qualquer coisa juntos"],3],
+["Qual lugar vocês escolheriam para viajar?",["Praia","Serra","Cidade nova","Um lugar surpresa"],0],
+["Qual demonstração de carinho você mais gosta?",["Abraço","Beijo","Mensagem","Companhia"],1],
+["Quem manda mais mensagens?",["Eu","Você","Os dois","Depende"],2],
+["Qual combina mais com um encontro de vocês?",["Comida","Música","Filme","Passeio"],0],
+["Se ganhassem uma viagem agora?",["Praia","Europa","Interior","Qualquer lugar juntos"],3],
+["Qual palavra combina com vocês?",["Amor","Parceria","Diversão","Todas"],3],
+["Quem esqueceria onde colocou o celular?",["Eu","Você","Os dois","Nenhum"],2]
+];
+function show(x){['home','lobby','game','runner','result'].forEach(id=>document.getElementById(id).classList.toggle('hidden',id!==x))}
+function notice(id,t,ok=false){document.getElementById(id).innerHTML=t?`<div class="msg ${ok?'ok':''}">${t}</div>`:''}
+function nm(){return document.getElementById('name').value.trim()||'Jogador'}
+auth.signInAnonymously().then(x=>uid=x.user.uid).catch(e=>notice('homeMsg','Erro no Firebase: '+e.message));
+function gen(){return Math.random().toString(36).slice(2,8).toUpperCase()}
+async function createRoom(){if(!uid)return notice('homeMsg','Aguarde o Firebase conectar.');room=gen();host=true;await db.ref('rooms/'+room).set({host:uid,status:'lobby',mode:'quiz',index:0,players:{[uid]:{name:nm(),score:0,distance:0,alive:true,host:true}}});listen();show('lobby')}
+async function joinRoom(){if(!uid)return notice('homeMsg','Aguarde o Firebase conectar.');room=document.getElementById('codeInput').value.trim().toUpperCase();let s=await db.ref('rooms/'+room).once('value');if(!s.exists())return notice('homeMsg','Sala não encontrada.');let p=s.val().players||{};if(Object.keys(p).length>=2)return notice('homeMsg','Sala cheia.');await db.ref('rooms/'+room+'/players/'+uid).set({name:nm(),score:0,distance:0,alive:true,host:false});listen();show('lobby')}
+function listen(){db.ref('rooms/'+room).on('value',s=>{let d=s.val();if(!d)return;currentData=d;renderLobby(d);if(d.status==='playing'&&d.mode==='quiz')renderGame(d);if(d.status==='playing'&&d.mode==='runner')startRunnerFromData(d);if(d.status==='finished')renderResult(d)})}
+function renderLobby(d){document.getElementById('code').textContent=room;let p=Object.values(d.players||{});document.getElementById('players').innerHTML=p.map(x=>'❤️ '+x.name).join('<br>');let ready=p.length===2;document.getElementById('modeChooser').classList.toggle('hidden',!ready);document.getElementById('start').style.display=host&&ready?'block':'none';notice('lobbyMsg',ready?'Os dois estão prontos! Escolha o jogo.':'Aguardando o segundo jogador...',ready)}
+function selectMode(m){if(!host)return;selectedMode=m;document.getElementById('quizMode').classList.toggle('selected',m==='quiz');document.getElementById('runMode').classList.toggle('selected',m==='runner')}
+async function startSelectedGame(){if(!host)return;await db.ref('rooms/'+room).update({status:'playing',mode:selectedMode,index:0,answers:{},startedAt:selectedMode==='runner'?firebase.database.ServerValue.TIMESTAMP:null});if(selectedMode==='runner'){await db.ref('rooms/'+room+'/players').once('value')}}
+function renderGame(d){show('game');let i=d.index||0;if(i>=qs.length)return;answerLock=!!(d.answers&&d.answers[i]&&d.answers[i][uid]);document.getElementById('round').textContent=`Rodada ${i+1} / ${qs.length}`;document.getElementById('question').textContent=qs[i][0];let ps=Object.entries(d.players||{}),me=d.players[uid],ot=ps.find(x=>x[0]!==uid);document.getElementById('me').textContent=me?.score||0;document.getElementById('other').textContent=ot?.[1]?.score||0;document.getElementById('options').innerHTML=qs[i][1].map((o,n)=>`<button class="option" ${answerLock?'disabled':''} onclick="answer(${n})">${String.fromCharCode(65+n)} — ${o}</button>`).join('');notice('gameMsg',answerLock?'Resposta registrada. Aguardando o outro jogador...':'Escolha uma resposta.',answerLock)}
+async function answer(n){if(answerLock)return;let s=await db.ref('rooms/'+room).once('value'),d=s.val(),i=d.index||0;if(d.answers?.[i]?.[uid])return;answerLock=true;let correct=n===qs[i][2];await db.ref(`rooms/${room}/answers/${i}/${uid}`).set({choice:n,correct});if(correct)await db.ref(`rooms/${room}/players/${uid}/score`).transaction(v=>(v||0)+1);s=await db.ref('rooms/'+room).once('value');let a=s.val().answers?.[i]||{};if(Object.keys(a).length===2){if(i+1<qs.length)await db.ref('rooms/'+room).update({index:i+1,answers:{}});else await db.ref('rooms/'+room).update({status:'finished'})}}
+function copyCode(){navigator.clipboard?.writeText(room);notice('lobbyMsg','Código copiado!',true)}
+
+// ===== CORRIDA RETRÔ DIVERTIDA =====
+let runnerStarted=false,runnerAnim=0,lastSync=0,runState=null,keys={left:false,right:false},jumpQueued=false,worldX=0,velY=0,onGround=true,obstacles=[],coins=[],stars=[],enemies=[],powerups=[],distance=0,runnerEndShown=false;
+const canvas=document.getElementById('canvas'),ctx=canvas.getContext('2d');
+const RUN_TIME=90, WORLD_LIMIT=30000;
+function resetRunner(){runnerStarted=false;runnerEndShown=false;worldX=0;velY=0;onGround=true;obstacles=[];coins=[];stars=[];enemies=[];powerups=[];distance=0;runState={lives:3,coins:0,stars:0,inv:0,turbo:0,combo:0,comboUntil:0,dead:false};cancelAnimationFrame(runnerAnim)}
+function startRunnerFromData(d){if(runnerStarted)return;resetRunner();runnerStarted=true;show('runner');buildWorld();runnerLoop()}
+function buildWorld(){
+  let x=550;
+  while(x<WORLD_LIMIT){
+    x+=320+Math.random()*360;
+    if(Math.random()<.82) obstacles.push({x,w:38+Math.random()*48,h:35+Math.random()*55});
+    if(Math.random()<.55) enemies.push({x:x+100+Math.random()*180,w:34,h:34,phase:Math.random()*6.28});
+  }
+  for(let x=300;x<WORLD_LIMIT;x+=250+Math.random()*320) coins.push({x,y:235+Math.random()*55,got:false});
+  for(let x=900;x<WORLD_LIMIT;x+=900+Math.random()*900) stars.push({x,y:210+Math.random()*65,got:false});
+  for(let x=1500;x<WORLD_LIMIT;x+=1700+Math.random()*1500) powerups.push({x,y:270,got:false});
+}
+function playerColor(){return uid===currentData?.host?'#ff5f6d':'#6c63ff'}
+function jump(){if(onGround){velY=-13;onGround=false}}
+function hit(){if(runState.inv>0)return;runState.lives--;runState.combo=0;runState.inv=2.0;worldX=Math.max(0,worldX-180);velY=-8;document.getElementById('canvasBox').classList.remove('shake');void document.getElementById('canvasBox').offsetWidth;document.getElementById('canvasBox').classList.add('shake');if(navigator.vibrate)navigator.vibrate(100);if(runState.lives<=0)runState.dead=true}
+function collect(){
+  for(const c of coins){if(!c.got&&Math.abs(c.x-worldX)<38){c.got=true;runState.coins++;runState.combo++;runState.comboUntil=Date.now()+1800}}
+  for(const st of stars){if(!st.got&&Math.abs(st.x-worldX)<40){st.got=true;runState.stars++;runState.combo+=2;runState.comboUntil=Date.now()+2200}}
+  for(const pw of powerups){if(!pw.got&&Math.abs(pw.x-worldX)<42){pw.got=true;runState.turbo=4.5;runState.lives=Math.min(3,runState.lives+1);runState.combo+=3;runState.comboUntil=Date.now()+2500}}
+}
+function runnerLoop(){if(!runnerStarted)return;let d=currentData||{};let elapsed=(Date.now()-(d.startedAt||Date.now()))/1000;let remain=Math.max(0,RUN_TIME-elapsed);document.getElementById('runTime').textContent=Math.ceil(remain);if(remain<=0||runState.dead||worldX>=WORLD_LIMIT){finishRunner();return}
+  if(runState.inv>0)runState.inv-=1/60;if(runState.turbo>0)runState.turbo-=1/60;
+  let speed=3.4+(runState.turbo>0?3.0:0)+(runState.combo>=5?0.7:0);
+  if(keys.left)worldX=Math.max(0,worldX-3.5);if(keys.right)worldX+=1.8;else worldX+=speed;
+  if(jumpQueued){jump();jumpQueued=false}
+  velY+=0.62;let py=300+velY;if(py>=300){py=300;velY=0;onGround=true}else onGround=false;
+  let player={x:worldX,y:py,w:34,h:46};
+  for(const o of obstacles){if(o.x+o.w>worldX&&o.x<worldX+player.w&&py+player.h>300-o.h){hit();break}}
+  for(const e of enemies){let ey=300-34+Math.sin(Date.now()/350+e.phase)*18;if(Math.abs(e.x-worldX)<32&&py+38>ey&&py<ey+34)hit()}
+  collect();
+  if(runState.comboUntil<Date.now())runState.combo=0;
+  distance=Math.floor(worldX/10);
+  document.getElementById('runMe').textContent=distance+' m';
+  let ps=Object.entries(d.players||{}),ot=ps.find(x=>x[0]!==uid);let od=Math.floor((ot?.[1]?.distance||0));document.getElementById('runOther').textContent=od+' m';
+  document.getElementById('runProgress').style.width=Math.min(100,distance/300)+'%';
+  document.getElementById('powerText').innerHTML='❤️'.repeat(runState.lives)+'🖤'.repeat(3-runState.lives)+' &nbsp; 🪙 '+runState.coins+' &nbsp; ⭐ '+runState.stars+(runState.turbo>0?' &nbsp; ⚡ TURBO!':'')+(runState.combo>=2?' &nbsp; 🔥 x'+runState.combo:'');
+  drawRunner(py);if(Date.now()-lastSync>150){lastSync=Date.now();db.ref(`rooms/${room}/players/${uid}`).update({distance,alive:!runState.dead,coins:runState.coins,stars:runState.stars})}runnerAnim=requestAnimationFrame(runnerLoop)
+}
+function drawRunner(py){ctx.clearRect(0,0,900,430);let sky=ctx.createLinearGradient(0,0,0,430);sky.addColorStop(0,'#7fd6ff');sky.addColorStop(1,'#eafcff');ctx.fillStyle=sky;ctx.fillRect(0,0,900,430);
+  // nuvens e montanhas
+  ctx.fillStyle='rgba(255,255,255,.8)';for(let i=0;i<5;i++){let cx=(i*230-(worldX*.12)%230);ctx.beginPath();ctx.arc(cx,75,24,0,7);ctx.arc(cx+25,68,30,0,7);ctx.arc(cx+55,78,22,0,7);ctx.fill()}
+  ctx.fillStyle='#91d67c';ctx.beginPath();ctx.moveTo(0,300);for(let x=0;x<=900;x+=70)ctx.lineTo(x,260+((x+worldX*.2)%140)/4);ctx.lineTo(900,330);ctx.lineTo(0,330);ctx.fill();
+  ctx.fillStyle='#a9e58d';ctx.fillRect(0,330,900,100);ctx.fillStyle='#61b957';ctx.fillRect(0,365,900,65);
+  for(let i=-1;i<24;i++){let bx=i*80-(worldX%80);ctx.fillStyle='#438f49';ctx.fillRect(bx,345,50,12)}
+  // obstáculos
+  for(const o of obstacles){let sx=o.x-worldX+220;if(sx>-100&&sx<950){ctx.fillStyle='#8e3b2d';ctx.fillRect(sx,330-o.h,o.w,o.h);ctx.fillStyle='#d35a3c';ctx.fillRect(sx,330-o.h,o.w,7);ctx.fillStyle='#5e2a24';ctx.fillRect(sx+8,330-o.h+12,7,7);ctx.fillRect(sx+o.w-15,330-o.h+12,7,7)}}
+  // inimigos
+  for(const e of enemies){let sx=e.x-worldX+220;if(sx>-50&&sx<950){let ey=300-34+Math.sin(Date.now()/350+e.phase)*18;ctx.fillStyle='#7b3fb2';ctx.beginPath();ctx.arc(sx+17,ey+17,17,0,7);ctx.fill();ctx.fillStyle='#fff';ctx.fillRect(sx+8,ey+8,6,7);ctx.fillRect(sx+21,ey+8,6,7);ctx.fillStyle='#222';ctx.fillRect(sx+10,ey+10,3,4);ctx.fillRect(sx+23,ey+10,3,4)}}
+  // moedas
+  for(const c of coins){let sx=c.x-worldX+220;if(!c.got&&sx>-30&&sx<930){ctx.beginPath();ctx.arc(sx,c.y,11,0,7);ctx.fillStyle='#ffd34d';ctx.fill();ctx.strokeStyle='#c28a00';ctx.stroke();ctx.fillStyle='#fff1a8';ctx.fillRect(sx-2,c.y-7,4,14)}}
+  // estrelas
+  for(const st of stars){let sx=st.x-worldX+220;if(!st.got&&sx>-40&&sx<940){let y=st.y+Math.sin(Date.now()/250)*5;drawStar(sx,y,5,15,7,'#fff06a')}}
+  // powerup
+  for(const pw of powerups){let sx=pw.x-worldX+220;if(!pw.got&&sx>-40&&sx<940){ctx.fillStyle='#36d07c';ctx.beginPath();ctx.arc(sx,270,16,0,7);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 20px Arial';ctx.fillText('⚡',sx-11,277)}}
+  // bandeira final
+  if(worldX>WORLD_LIMIT-160){ctx.fillStyle='#fff';ctx.fillRect(760,45,5,285);ctx.fillStyle='#ffd34d';ctx.fillRect(765,50,85,42);ctx.fillStyle='#222';ctx.font='bold 16px Arial';ctx.fillText('CHEGUE!',775,77)}
+  // player
+  let px=220;ctx.globalAlpha=(runState.inv>0&&Math.floor(Date.now()/90)%2)?0.35:1;ctx.fillStyle=playerColor();ctx.fillRect(px,py-46,34,34);ctx.fillStyle='#222';ctx.fillRect(px+6,py-12,9,12);ctx.fillRect(px+22,py-12,9,12);ctx.fillStyle='#fff';ctx.fillRect(px+8,py-37,7,7);ctx.fillRect(px+21,py-37,7,7);ctx.fillStyle='#ffd0b5';ctx.fillRect(px+8,py-28,20,11);if(runState.turbo>0){ctx.fillStyle='#ffcf33';ctx.beginPath();ctx.moveTo(px-7,py-22);ctx.lineTo(px-30,py-13);ctx.lineTo(px-7,py-6);ctx.fill()}ctx.globalAlpha=1;
+  ctx.fillStyle='#fff';ctx.font='bold 15px Arial';ctx.fillText('CORRA! 🏁',18,28);
+}
+function drawStar(cx,cy,spikes,outer,inner,color){let rot=Math.PI/2*3,x=cx,y=cy,step=Math.PI/spikes;ctx.beginPath();ctx.moveTo(cx,cy-outer);for(let i=0;i<spikes;i++){x=cx+Math.cos(rot)*outer;y=cy+Math.sin(rot)*outer;ctx.lineTo(x,y);rot+=step;x=cx+Math.cos(rot)*inner;y=cy+Math.sin(rot)*inner;ctx.lineTo(x,y);rot+=step}ctx.lineTo(cx,cy-outer);ctx.closePath();ctx.fillStyle=color;ctx.fill();}
+function finishRunner(){if(runnerEndShown)return;runnerEndShown=true;let finalDist=Math.floor(worldX/10);db.ref(`rooms/${room}/players/${uid}`).update({distance:finalDist,alive:false,finishedAt:firebase.database.ServerValue.TIMESTAMP,coins:runState.coins,stars:runState.stars});notice('runnerMsg','🏁 Você terminou com <b>'+finalDist+' m</b>! 🪙 '+runState.coins+' moedas • ⭐ '+runState.stars+' estrelas. Aguarde o outro jogador...',true);setTimeout(async()=>{let s=await db.ref('rooms/'+room).once('value'),d=s.val(),p=Object.values(d.players||{});if(p.length===2&&p.every(x=>x.alive===false))await db.ref('rooms/'+room).update({status:'finished'})},700)}
+function bindHold(id,prop){let el=document.getElementById(id);['pointerdown','touchstart'].forEach(ev=>el.addEventListener(ev,e=>{e.preventDefault();keys[prop]=true},{passive:false}));['pointerup','pointercancel','pointerleave','touchend'].forEach(ev=>el.addEventListener(ev,e=>{e.preventDefault();keys[prop]=false},{passive:false}))}
+bindHold('leftBtn','left');bindHold('rightBtn','right');document.getElementById('jumpBtn').addEventListener('pointerdown',e=>{e.preventDefault();jumpQueued=true},{passive:false});document.getElementById('jumpBtn').addEventListener('touchstart',e=>{e.preventDefault();jumpQueued=true},{passive:false});window.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')keys.left=true;if(e.key==='ArrowRight')keys.right=true;if(e.key===' '||e.key==='ArrowUp')jumpQueued=true});window.addEventListener('keyup',e=>{if(e.key==='ArrowLeft')keys.left=false;if(e.key==='ArrowRight')keys.right=false});
+</script></body></html>
