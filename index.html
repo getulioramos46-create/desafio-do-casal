@@ -11,197 +11,237 @@
 body{
 margin:0;
 font-family:Arial,sans-serif;
-background:linear-gradient(135deg,#29152f,#64264d);
-color:white;
+background:linear-gradient(135deg,#351238,#741f58);
+color:#2d1835;
 min-height:100vh
 }
 
 main{
-max-width:620px;
+max-width:720px;
 margin:auto;
-padding:14px
+padding:12px
 }
 
 .card{
-background:white;
-color:#2d1831;
-border-radius:24px;
+background:#fff;
+border-radius:28px;
 padding:20px;
-margin-top:14px;
-box-shadow:0 12px 30px #160b1c55
+margin:12px 0;
+box-shadow:0 12px 35px #0005
 }
 
 h1{
-font-size:30px;
-margin:5px 0 10px
+text-align:center;
+font-size:31px;
+margin:5px 0 18px
 }
 
-button,input{
+h2{text-align:center}
+
+input{
 width:100%;
 padding:15px;
-margin:6px 0;
-border:0;
+border:2px solid #ddd;
 border-radius:14px;
-font-size:17px
+font-size:18px;
+margin:7px 0
 }
 
 button{
-background:#ff7565;
-color:white;
-font-weight:bold
+border:0;
+border-radius:16px;
+padding:15px 18px;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+touch-action:manipulation
 }
 
-button:active{
-transform:scale(.97)
+.primary{
+background:#ff7067;
+color:#fff;
+width:100%;
+margin-top:10px
 }
 
-.alt{
-background:#eeeeee;
-color:#321d36
+.secondary{
+background:#eee;
+color:#321b39;
+width:100%;
+margin-top:10px
+}
+
+.mode{
+padding:20px;
+border:3px solid #eee;
+border-radius:22px;
+margin:12px 0;
+text-align:center;
+cursor:pointer
+}
+
+.mode.selected{
+border-color:#ff7067;
+background:#fff0ee
 }
 
 .hidden{
 display:none!important
 }
 
-.code{
-text-align:center;
-font-size:38px;
-font-weight:bold;
-letter-spacing:7px
+.room{
+font-size:40px;
+font-weight:900;
+letter-spacing:7px;
+text-align:center
 }
 
-.msg{
-padding:13px;
-border-radius:12px;
-margin-top:8px;
-background:#fff0bf;
-color:#5a4300
+.ok,.err,.result{
+padding:14px;
+border-radius:16px;
+margin-top:12px
 }
 
 .ok{
 background:#dff6e7;
-color:#17552d
+color:#155d35
 }
 
-.modegrid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px
+.err{
+background:#ffe1e1;
+color:#8b1c1c
 }
 
-.mode{
-background:#f4edf5;
-color:#321d36;
-min-height:120px
-}
-
-.mode span{
-font-size:35px;
-display:block
-}
-
-.mode.selected{
-outline:4px solid #ff7565;
-background:#ffe7e3
-}
-
-/* CORRIDA */
-
-.runner{
-background:#101522!important;
-color:white!important;
-padding:0!important;
-overflow:hidden
-}
-
-.hud{
-padding:14px
-}
-
-.hudrow{
+.scoreline{
 display:flex;
 gap:8px
 }
 
-.hudbox{
+.scoreline>div{
 flex:1;
-background:#20283a;
-border-radius:12px;
-padding:10px 5px;
+background:#f3edf6;
+border-radius:14px;
+padding:12px;
 text-align:center;
 font-weight:bold
 }
 
-.progress{
-height:9px;
-background:#20283a;
-border-radius:20px;
-overflow:hidden;
-margin-top:10px
-}
-
-.progress div{
-height:100%;
-width:0;
-background:#ffd34d
-}
-
-.canvasbox{
-background:#8bd4ff;
-width:100%
-}
-
-canvas{
+.answers button{
 display:block;
 width:100%;
-height:auto
+margin:9px 0;
+background:#f2edf5;
+text-align:left
+}
+
+.racebox{
+background:#0d1424;
+color:white;
+border-radius:28px;
+overflow:hidden
+}
+
+.racehead{
+padding:12px;
+display:flex;
+gap:7px
+}
+
+.racehead>div{
+flex:1;
+background:#202b42;
+border-radius:12px;
+padding:9px;
+text-align:center;
+font-size:14px
+}
+
+.track{
+height:270px;
+position:relative;
+overflow:hidden;
+background:linear-gradient(#6bd0f3 0 62%,#8bd477 62% 78%,#54b65a 78%);
+border-top:3px solid #fff2
+}
+
+.cloud{
+position:absolute;
+background:#fff;
+border-radius:50px;
+width:85px;
+height:28px;
+top:35px;
+opacity:.85
+}
+
+.ground{
+position:absolute;
+bottom:0;
+left:0;
+right:0;
+height:58px;
+background:repeating-linear-gradient(90deg,#429c50 0 38px,#61b965 38px 76px)
+}
+
+.player,.enemy,.coin,.star,.obstacle{
+position:absolute;
+z-index:3
+}
+
+.player{
+font-size:40px;
+bottom:55px;
+left:55px
+}
+
+.enemy{
+font-size:34px;
+bottom:55px
+}
+
+.coin,.star{
+font-size:28px;
+bottom:75px
+}
+
+.obstacle{
+font-size:42px;
+bottom:53px
 }
 
 .controls{
-display:flex;
-gap:10px;
-padding:12px;
-background:#101522;
-touch-action:none
+display:grid;
+grid-template-columns:1fr 1.5fr 1fr;
+gap:9px;
+padding:13px
 }
 
-.control{
-height:70px;
-margin:0;
-font-size:25px;
-touch-action:none;
--webkit-user-select:none;
-user-select:none
+.controls button{
+font-size:26px;
+background:#283650;
+color:#fff;
+min-height:80px
 }
 
-.left,
-.right{
-width:75px;
-background:#293348
+.controls .jump{
+background:#ff7067
 }
 
-.jump{
-flex:1;
-background:#ff7565
-}
-
-.hint{
+.raceinfo{
 text-align:center;
-font-size:13px;
-padding:0 12px 12px;
-line-height:1.5
+padding:0 14px 18px
 }
 
-.runnerMsg{
-padding:15px;
-font-size:17px
+.result{
+background:#dff6e7;
+color:#155d35
 }
 
-@media(max-width:420px){
-.modegrid{
-grid-template-columns:1fr
-}
+@media(max-width:480px){
+main{padding:9px}
+.card{padding:17px}
+.room{font-size:32px}
+.track{height:250px}
 }
 </style>
 </head>
@@ -210,259 +250,202 @@ grid-template-columns:1fr
 
 <main>
 
-<!-- INÍCIO -->
-<div class="card" id="home">
+<section id="home" class="card">
 
 <h1>❤️ Desafio do Casal</h1>
 
-<p>Até onde vai a sintonia?</p>
+<input id="name" placeholder="Seu nome">
 
-<input id="name" placeholder="Seu nome" maxlength="20">
-
-<button onclick="createRoom()">
+<button id="createBtn" class="primary">
 Criar uma sala
 </button>
 
-<button class="alt" onclick="mostrarEntrada()">
-Entrar com código
+<input id="roomInput" placeholder="Código da sala">
+
+<button id="joinBtn" class="secondary">
+Entrar em uma sala
 </button>
 
-<div id="joinBox" class="hidden">
+<div id="message"></div>
 
-<input id="roomInput"
-placeholder="Código da sala"
-maxlength="6">
-
-<button onclick="joinRoom()">
-Entrar na sala
-</button>
-
-</div>
-
-<div id="homeMsg"></div>
-
-</div>
+</section>
 
 
-<!-- SALA -->
-<div class="card hidden" id="lobby">
+<section id="lobby" class="card hidden">
 
-<p>CÓDIGO DA SALA</p>
+<h1>❤️ Sala</h1>
 
-<div class="code" id="roomCode"></div>
+<div class="room" id="roomCode"></div>
 
-<p>Envie este código para sua namorada ❤️</p>
+<p style="text-align:center">
+Envie este código para sua namorada.
+</p>
 
 <div id="players"></div>
 
-<div id="modeChooser" class="hidden">
+<h2>Escolham o jogo</h2>
 
-<h2 style="text-align:center">
-Escolham o jogo ❤️
-</h2>
-
-<div class="modegrid">
-
-<button id="quizMode"
-class="mode selected"
-onclick="selectMode('quiz')">
-
-<span>❓</span>
-
-Perguntas
-
-<br>
-
-<small>Quem acerta mais?</small>
-
-</button>
-
-
-<button id="runnerMode"
-class="mode"
-onclick="selectMode('runner')">
-
-<span>🏃</span>
-
-Corrida retrô
-
-<br>
-
-<small>Quem vai mais longe?</small>
-
-</button>
-
+<div id="quizMode" class="mode selected">
+❓<br>
+<b>Perguntas</b><br>
+Acertos e erros
 </div>
 
-<button id="startButton"
-onclick="startGame()">
+<div id="raceMode" class="mode">
+🏃<br>
+<b>Corrida retrô</b><br>
+Quem vai mais longe?
+</div>
 
+<button id="startBtn" class="primary">
 Começar partida
-
 </button>
 
-</div>
-
-<button class="alt" onclick="copyRoom()">
+<button id="copyBtn" class="secondary">
 Copiar código
 </button>
 
 <div id="lobbyMsg"></div>
 
+</section>
+
+
+<section id="quiz" class="card hidden">
+
+<h1>❓ Desafio de perguntas</h1>
+
+<div class="scoreline">
+
+<div id="myScore">
+Você<br>0
 </div>
 
-
-<!-- QUIZ -->
-<div class="card hidden" id="quiz">
-
-<div style="display:flex;gap:10px">
-
-<div style="flex:1;text-align:center">
-Você<br>
-<b id="myScore">0</b>
+<div id="otherScore">
+Outro<br>0
 </div>
-
-<div style="flex:1;text-align:center">
-Outro<br>
-<b id="otherScore">0</b>
-</div>
-
-</div>
-
-<p id="round"></p>
-
-<h2 id="question"></h2>
-
-<div id="answers"></div>
-
-<div id="quizMsg"></div>
 
 </div>
 
+<h2 id="question">
+Aguardando...
+</h2>
 
-<!-- CORRIDA -->
-<div class="card runner hidden" id="runner">
+<div id="answers" class="answers"></div>
 
-<div class="hud">
+<div id="quizStatus" class="ok">
+Aguardando os dois jogadores.
+</div>
 
-<div class="hudrow">
+</section>
 
-<div class="hudbox">
-🏃 Você
-<br>
+
+<section id="race" class="racebox hidden">
+
+<div class="racehead">
+
+<div>
+🏃 Você<br>
 <b id="myDistance">0 m</b>
 </div>
 
-<div class="hudbox">
-💨 Outro
-<br>
+<div>
+💨 Outro<br>
 <b id="otherDistance">0 m</b>
 </div>
 
-<div class="hudbox">
-⏱️ Tempo
-<br>
-<b id="time">90</b>s
+<div>
+⏱️ Tempo<br>
+<b id="time">90s</b>
 </div>
 
 </div>
 
-<div class="progress">
-<div id="progress"></div>
+
+<div class="track">
+
+<div class="cloud" style="left:12%"></div>
+
+<div class="cloud" style="left:48%;top:70px"></div>
+
+<div class="cloud" style="left:82%;top:25px"></div>
+
+<div class="ground"></div>
+
+<div id="player" class="player">
+🏃
 </div>
 
-<p id="stats" style="text-align:center">
-❤️❤️❤️ 🪙 0 ⭐ 0
-</p>
-
+<div id="enemy1" class="enemy">
+👾
 </div>
 
+<div id="enemy2" class="enemy">
+🐢
+</div>
 
-<div class="canvasbox">
+<div id="coin1" class="coin">
+🪙
+</div>
 
-<canvas id="gameCanvas"
-width="900"
-height="430">
-</canvas>
+<div id="star1" class="star">
+⭐
+</div>
+
+<div id="obstacle1" class="obstacle">
+🧱
+</div>
 
 </div>
 
 
 <div class="controls">
 
-<button
-class="control left"
-id="leftButton">
+<button id="leftBtn">
 ◀
 </button>
 
-<button
-class="control jump"
-id="jumpButton">
-⬆ PULAR
+<button id="jumpBtn" class="jump">
+⬆️ PULAR
 </button>
 
-<button
-class="control right"
-id="rightButton">
+<button id="rightBtn">
 ▶
 </button>
 
 </div>
 
 
-<div class="hint">
+<div class="raceinfo">
 
-🏃 Corra automaticamente<br>
+<p>
+🏃 Corra • 🪙 moedas • ⭐ estrelas • ❤️ evite obstáculos
+</p>
 
-◀ ▶ Controle o personagem<br>
+<p>
+<b>Use os botões. Quem chegar mais longe vence!</b>
+</p>
 
-⬆ PULE os obstáculos<br>
-
-🪙 Pegue moedas • ⭐ Pegue estrelas<br>
-
-❤️ Você tem 3 vidas<br>
-
-🏆 Quem chegar mais longe vence!
+<div id="raceStatus" class="result hidden"></div>
 
 </div>
 
-
-<div class="runnerMsg" id="runnerMsg"></div>
-
-</div>
-
-
-<!-- RESULTADO -->
-<div class="card hidden" id="result">
-
-<h1>🏆 Resultado ❤️</h1>
-
-<div id="resultText"></div>
-
-<button onclick="location.reload()">
-Jogar novamente
-</button>
-
-</div>
+</section>
 
 </main>
 
 
-<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 
 
 <script>
 
 const firebaseConfig={
 
-apiKey:"AIzaSyBAuo8w6KkYmi37iByjOQfzoLl7l2sYOLY",
+apiKey:"AIzaSyBAuo8wK6kYmi37iByoJQfzoLl7l2sYOLY",
 
 authDomain:"desafio-do-casal-ccca5.firebaseapp.com",
 
@@ -478,1481 +461,1075 @@ databaseURL:"https://desafio-do-casal-ccca5-default-rtdb.firebaseio.com/"
 
 };
 
-firebase.initializeApp(firebaseConfig);
 
-const db=firebase.database();
+firebase.initializeApp(firebaseConfig);
 
 const auth=firebase.auth();
 
-let uid=null;
+const db=firebase.database();
 
-let room=null;
 
-let host=false;
+let uid="";
 
-let selectedMode="quiz";
+let room="";
 
-let answerLocked=false;
+let me="";
 
-let roomData=null;
+let role="";
 
+let mode="quiz";
 
-/* PERGUNTAS */
+let roomRef=null;
 
-const questions=[
+let quizIndex=0;
 
-[
-"Qual seria o programa perfeito para uma noite juntos?",
-["Filme e coberta","Sair juntos","Jogar juntos","Qualquer coisa juntos"],
-3
-],
+let answered=false;
 
-[
-"Qual lugar vocês escolheriam para viajar?",
-["Praia","Serra","Cidade nova","Um lugar surpresa"],
-0
-],
+let lastQuestion=-1;
 
-[
-"Qual demonstração de carinho você mais gosta?",
-["Abraço","Beijo","Mensagem","Companhia"],
-1
-],
-
-[
-"Quem manda mais mensagens?",
-["Eu","Você","Os dois","Depende"],
-2
-],
-
-[
-"Qual combina mais com um encontro de vocês?",
-["Comida","Música","Filme","Passeio"],
-0
-],
-
-[
-"Se ganhassem uma viagem agora?",
-["Praia","Europa","Interior","Qualquer lugar juntos"],
-3
-],
-
-[
-"Qual palavra combina mais com vocês?",
-["Amor","Parceria","Diversão","Todas"],
-3
-],
-
-[
-"Quem esqueceria onde colocou o celular?",
-["Eu","Você","Os dois","Nenhum"],
-2
-]
-
-];
-
-
-/* FUNÇÕES DE TELA */
-
-function showScreen(id){
-
-["home","lobby","quiz","runner","result"].forEach(x=>{
-
-document.getElementById(x).classList.toggle(
-"hidden",
-x!==id
-);
-
-});
-
-}
-
-
-function message(id,text,ok=false){
-
-document.getElementById(id).innerHTML=
-
-text
-?
-`<div class="msg ${ok?"ok":""}">${text}</div>`
-:"";
-
-}
-
-
-function playerName(){
-
-return document.getElementById("name").value.trim() || "Jogador";
-
-}
-
-
-/* LOGIN */
-
-auth.signInAnonymously()
-
-.then(user=>{
-
-uid=user.user.uid;
-
-})
-
-.catch(error=>{
-
-message(
-"homeMsg",
-"Erro ao conectar ao Firebase: "+error.message
-);
-
-});
-
-
-/* SALA */
-
-function randomCode(){
-
-return Math.random()
-.toString(36)
-.substring(2,8)
-.toUpperCase();
-
-}
-
-
-async function createRoom(){
-
-if(!uid){
-
-message("homeMsg","Aguarde a conexão...");
-
-return;
-
-}
-
-room=randomCode();
-
-host=true;
-
-await db.ref("rooms/"+room).set({
-
-host:uid,
-
-status:"lobby",
-
-mode:"quiz",
-
-index:0,
-
-players:{
-
-[uid]:{
-
-name:playerName(),
-
-score:0,
-
-distance:0,
-
-alive:true,
-
-host:true
-
-}
-
-}
-
-});
-
-listenRoom();
-
-showScreen("lobby");
-
-}
-
-
-function mostrarEntrada(){
-
-document.getElementById("joinBox")
-.classList.remove("hidden");
-
-}
-
-
-async function joinRoom(){
-
-if(!uid){
-
-message("homeMsg","Aguarde a conexão...");
-
-return;
-
-}
-
-room=document
-.getElementById("roomInput")
-.value
-.trim()
-.toUpperCase();
-
-if(room.length!==6){
-
-message("homeMsg","Digite o código de 6 caracteres.");
-
-return;
-
-}
-
-const snapshot=
-await db.ref("rooms/"+room).once("value");
-
-if(!snapshot.exists()){
-
-message("homeMsg","Sala não encontrada.");
-
-return;
-
-}
-
-const data=snapshot.val();
-
-const players=data.players||{};
-
-if(Object.keys(players).length>=2){
-
-message("homeMsg","Essa sala já está cheia.");
-
-return;
-
-}
-
-await db.ref(
-"rooms/"+room+"/players/"+uid
-).set({
-
-name:playerName(),
-
-score:0,
-
-distance:0,
-
-alive:true,
-
-host:false
-
-});
-
-listenRoom();
-
-showScreen("lobby");
-
-}
-
-
-/* OUVIR SALA */
-
-function listenRoom(){
-
-db.ref("rooms/"+room).on("value",snapshot=>{
-
-const data=snapshot.val();
-
-if(!data)return;
-
-roomData=data;
-
-renderLobby(data);
-
-if(
-data.status==="playing" &&
-data.mode==="quiz"
-){
-
-renderQuiz(data);
-
-}
-
-if(
-data.status==="playing" &&
-data.mode==="runner"
-){
-
-startRunner(data);
-
-}
-
-if(data.status==="finished"){
-
-renderResult(data);
-
-}
-
-});
-
-}
-
-
-/* LOBBY */
-
-function renderLobby(data){
-
-document.getElementById("roomCode")
-.textContent=room;
-
-const players=
-Object.values(data.players||{});
-
-document.getElementById("players")
-.innerHTML=
-players
-.map(p=>"❤️ "+p.name)
-.join("<br>");
-
-const ready=players.length===2;
-
-document.getElementById("modeChooser")
-.classList.toggle("hidden",!ready);
-
-document.getElementById("startButton")
-.style.display=
-(host && ready)?"block":"none";
-
-message(
-"lobbyMsg",
-ready
-?"Os dois estão prontos! Escolham o jogo ❤️"
-:"Aguardando o segundo jogador..."
-);
-
-}
-
-
-function selectMode(mode){
-
-if(!host)return;
-
-selectedMode=mode;
-
-document.getElementById("quizMode")
-.classList.toggle(
-"selected",
-mode==="quiz"
-);
-
-document.getElementById("runnerMode")
-.classList.toggle(
-"selected",
-mode==="runner"
-);
-
-}
-
-
-async function startGame(){
-
-if(!host)return;
-
-await db.ref("rooms/"+room).update({
-
-status:"playing",
-
-mode:selectedMode,
-
-index:0,
-
-answers:{},
-
-startedAt:
-selectedMode==="runner"
-?
-firebase.database.ServerValue.TIMESTAMP
-:
-null
-
-});
-
-}
-
-
-function copyRoom(){
-
-if(navigator.clipboard){
-
-navigator.clipboard.writeText(room);
-
-}
-
-message(
-"lobbyMsg",
-"Código copiado! ❤️",
-true
-);
-
-}
-
-
-/* =========================
-QUIZ
-========================= */
-
-function renderQuiz(data){
-
-showScreen("quiz");
-
-const index=data.index||0;
-
-if(index>=questions.length)return;
-
-const players=data.players||{};
-
-const me=players[uid];
-
-let other=null;
-
-Object.keys(players).forEach(id=>{
-
-if(id!==uid)other=players[id];
-
-});
-
-document.getElementById("myScore")
-.textContent=me?.score||0;
-
-document.getElementById("otherScore")
-.textContent=other?.score||0;
-
-document.getElementById("round")
-.textContent=
-"Rodada "+(index+1)+" / "+questions.length;
-
-document.getElementById("question")
-.textContent=
-questions[index][0];
-
-const answers=
-questions[index][1];
-
-answerLocked=
-!!(
-data.answers &&
-data.answers[index] &&
-data.answers[index][uid]
-);
-
-document.getElementById("answers")
-.innerHTML=
-
-answers.map((answer,i)=>`
-
-<button
-class="answer"
-onclick="answerQuestion(${i})"
-${answerLocked?"disabled":""}>
-
-${String.fromCharCode(65+i)}
-— ${answer}
-
-</button>
-
-`).join("");
-
-message(
-"quizMsg",
-answerLocked
-?"Resposta registrada. Aguarde o outro jogador..."
-:"Escolha uma resposta.",
-answerLocked
-);
-
-}
-
-
-async function answerQuestion(choice){
-
-if(answerLocked)return;
-
-const snap=
-await db.ref("rooms/"+room).once("value");
-
-const data=snap.val();
-
-const index=data.index||0;
-
-if(
-data.answers &&
-data.answers[index] &&
-data.answers[index][uid]
-)return;
-
-answerLocked=true;
-
-const correct=
-choice===questions[index][2];
-
-await db.ref(
-"rooms/"+room+
-"/answers/"+index+
-"/"+uid
-).set({
-
-choice:choice,
-
-correct:correct
-
-});
-
-if(correct){
-
-await db.ref(
-"rooms/"+room+
-"/players/"+uid+"/score"
-).transaction(score=>(score||0)+1);
-
-}
-
-const again=
-await db.ref("rooms/"+room).once("value");
-
-const newData=again.val();
-
-const answers=
-newData.answers?.[index]||{};
-
-if(Object.keys(answers).length>=2){
-
-if(index+1<questions.length){
-
-await db.ref("rooms/"+room).update({
-
-index:index+1,
-
-answers:{}
-
-});
-
-}else{
-
-await db.ref("rooms/"+room).update({
-
-status:"finished"
-
-});
-
-}
-
-}
-
-}
-
-
-/* =========================
-CORRIDA
-========================= */
-
-const canvas=
-document.getElementById("gameCanvas");
-
-const ctx=canvas.getContext("2d");
-
-let runnerStarted=false;
-
-let animation=0;
-
-let world=0;
-
-let verticalSpeed=0;
-
-let ground=true;
-
-let direction=0;
-
-let jumpRequest=false;
-
-let lives=3;
+let distance=0;
 
 let coins=0;
 
 let stars=0;
 
-let turbo=0;
+let jumping=false;
 
-let obstacles=[];
+let left=false;
 
-let coinItems=[];
+let right=false;
 
-let starItems=[];
+let raceStarted=false;
 
-let enemyItems=[];
+let moveTimer=null;
 
-let runnerFinished=false;
+let sendTimer=null;
 
-const GAME_TIME=90;
-
-const WORLD_END=30000;
+let raceTimer=null;
 
 
-/* COMEÇAR CORRIDA */
+const questions=[
 
-function startRunner(data){
+[
+"Qual foi o primeiro encontro de vocês?",
+"Praia",
+"Cinema",
+"Shopping",
+"Praça",
+0
+],
 
-if(runnerStarted)return;
+[
+"Quem mandou a primeira mensagem?",
+"Você",
+"Ela",
+"Os dois",
+"Ninguém",
+1
+],
 
-runnerStarted=true;
+[
+"Qual é uma coisa que vocês gostam de fazer juntos?",
+"Sair",
+"Brigar",
+"Dormir separados",
+"Ignorar",
+0
+],
 
-runnerFinished=false;
+[
+"Quem é mais romântico?",
+"Você",
+"Ela",
+"Os dois",
+"Nenhum",
+2
+],
 
-world=0;
+[
+"Qual seria uma viagem legal para vocês?",
+"Praia",
+"Deserto",
+"Lua",
+"Nenhum",
+0
+],
 
-verticalSpeed=0;
+[
+"Quem demora mais para responder mensagem?",
+"Você",
+"Ela",
+"Os dois",
+"Depende",
+3
+]
 
-ground=true;
+];
 
-direction=0;
 
-jumpRequest=false;
+function $(id){
+return document.getElementById(id);
+}
 
-lives=3;
 
-coins=0;
+function showMessage(text,error=false){
 
-stars=0;
+$("message").className=error?"err":"ok";
 
-turbo=0;
-
-obstacles=[];
-
-coinItems=[];
-
-starItems=[];
-
-enemyItems=[];
-
-showScreen("runner");
-
-createWorld();
-
-gameLoop();
+$("message").textContent=text;
 
 }
 
 
-/* CRIAR FASE */
+function showScreen(id){
 
-function createWorld(){
+["home","lobby","quiz","race"].forEach(x=>{
 
-let x=500;
-
-while(x<WORLD_END){
-
-x+=
-280+
-Math.random()*350;
-
-if(Math.random()<0.75){
-
-obstacles.push({
-
-x:x,
-
-width:45+
-Math.random()*45,
-
-height:35+
-Math.random()*50
+$(x).classList.add("hidden");
 
 });
 
+$(id).classList.remove("hidden");
+
 }
 
-if(Math.random()<0.45){
 
-enemyItems.push({
+function waitAuth(){
 
-x:x+120+
-Math.random()*150
+if(auth.currentUser){
+
+return Promise.resolve(auth.currentUser);
+
+}
+
+return auth.signInAnonymously();
+
+}
+
+
+auth.onAuthStateChanged(user=>{
+
+if(user){
+
+uid=user.uid;
+
+}
 
 });
 
-}
 
-}
+$("createBtn").onclick=async()=>{
 
-for(
-let x=300;
-x<WORLD_END;
-x+=250+Math.random()*250
-){
+me=$("name").value.trim();
 
-coinItems.push({
+if(!me){
 
-x:x,
-
-y:220+
-Math.random()*70,
-
-taken:false
-
-});
-
-}
-
-for(
-let x=900;
-x<WORLD_END;
-x+=700+Math.random()*900
-){
-
-starItems.push({
-
-x:x,
-
-y:200+
-Math.random()*80,
-
-taken:false
-
-});
-
-}
-
-}
-
-
-/* PULAR */
-
-function jump(){
-
-if(!runnerStarted || runnerFinished)return;
-
-if(ground){
-
-verticalSpeed=-15;
-
-ground=false;
-
-}
-
-}
-
-
-/* MOVIMENTO */
-
-function moveLeft(){
-
-direction=-1;
-
-}
-
-
-function moveRight(){
-
-direction=1;
-
-}
-
-
-function stopMove(){
-
-direction=0;
-
-}
-
-
-/* BOTÕES */
-
-const leftButton=
-document.getElementById("leftButton");
-
-const rightButton=
-document.getElementById("rightButton");
-
-const jumpButton=
-document.getElementById("jumpButton");
-
-
-leftButton.addEventListener(
-"pointerdown",
-e=>{
-e.preventDefault();
-moveLeft();
-}
-);
-
-leftButton.addEventListener(
-"pointerup",
-e=>{
-e.preventDefault();
-stopMove();
-}
-);
-
-leftButton.addEventListener(
-"pointercancel",
-stopMove
-);
-
-leftButton.addEventListener(
-"pointerleave",
-stopMove
-);
-
-
-rightButton.addEventListener(
-"pointerdown",
-e=>{
-e.preventDefault();
-moveRight();
-}
-);
-
-rightButton.addEventListener(
-"pointerup",
-e=>{
-e.preventDefault();
-stopMove();
-}
-);
-
-rightButton.addEventListener(
-"pointercancel",
-stopMove
-);
-
-rightButton.addEventListener(
-"pointerleave",
-stopMove
-);
-
-
-jumpButton.addEventListener(
-"pointerdown",
-e=>{
-e.preventDefault();
-jump();
-}
-);
-
-
-/* TECLADO */
-
-window.addEventListener(
-"keydown",
-e=>{
-
-if(e.key==="ArrowLeft")
-moveLeft();
-
-if(e.key==="ArrowRight")
-moveRight();
-
-if(
-e.key==="ArrowUp" ||
-e.key===" "
-)
-jump();
-
-}
-);
-
-window.addEventListener(
-"keyup",
-e=>{
-
-if(
-e.key==="ArrowLeft" ||
-e.key==="ArrowRight"
-){
-
-stopMove();
-
-}
-
-}
-);
-
-
-/* LOOP */
-
-function gameLoop(){
-
-if(!runnerStarted)return;
-
-if(runnerFinished)return;
-
-
-/* TEMPO */
-
-let startTime=
-roomData?.startedAt||
-Date.now();
-
-let elapsed=
-(Date.now()-startTime)/1000;
-
-let remaining=
-Math.max(0,GAME_TIME-elapsed);
-
-document.getElementById("time")
-.textContent=Math.ceil(remaining);
-
-
-/* VELOCIDADE */
-
-let speed=3;
-
-if(turbo>0){
-
-speed=6;
-
-turbo-=1/60;
-
-}
-
-world+=speed;
-
-
-/* CONTROLE */
-
-if(direction<0){
-
-world-=2.5;
-
-}
-
-if(direction>0){
-
-world+=3;
-
-}
-
-if(world<0)world=0;
-
-
-/* PULO */
-
-if(jumpRequest){
-
-jump();
-
-jumpRequest=false;
-
-}
-
-verticalSpeed+=0.6;
-
-let playerY=300+verticalSpeed;
-
-if(playerY>=300){
-
-playerY=300;
-
-verticalSpeed=0;
-
-ground=true;
-
-}else{
-
-ground=false;
-
-}
-
-
-/* COLISÕES */
-
-if(ground){
-
-for(const obstacle of obstacles){
-
-if(
-obstacle.x<world+35 &&
-obstacle.x+obstacle.width>world &&
-playerY>=
-300-obstacle.height-5
-){
-
-loseLife();
-
-break;
-
-}
-
-}
-
-}
-
-
-/* MOEDAS */
-
-for(const item of coinItems){
-
-if(
-!item.taken &&
-Math.abs(item.x-world)<40
-){
-
-item.taken=true;
-
-coins++;
-
-}
-
-}
-
-
-/* ESTRELAS */
-
-for(const item of starItems){
-
-if(
-!item.taken &&
-Math.abs(item.x-world)<45
-){
-
-item.taken=true;
-
-stars++;
-
-}
-
-}
-
-
-/* DISTÂNCIA */
-
-let distance=
-Math.floor(world/10);
-
-document.getElementById("myDistance")
-.textContent=distance+" m";
-
-
-/* OUTRO */
-
-const players=
-roomData?.players||{};
-
-let other=null;
-
-Object.keys(players).forEach(id=>{
-
-if(id!==uid)other=players[id];
-
-});
-
-document.getElementById("otherDistance")
-.textContent=
-Math.floor(other?.distance||0)+" m";
-
-
-/* BARRA */
-
-document.getElementById("progress")
-.style.width=
-Math.min(100,distance/300)+"%";
-
-
-/* ESTATÍSTICAS */
-
-document.getElementById("stats")
-.textContent=
-"❤️".repeat(lives)+
-"🖤".repeat(3-lives)+
-" 🪙 "+coins+
-" ⭐ "+stars+
-(turbo>0?" ⚡ TURBO!":"");
-
-
-/* SALVAR NO FIREBASE */
-
-if(
-Math.floor(Date.now()/150)%2===0
-){
-
-db.ref(
-"rooms/"+room+
-"/players/"+uid
-).update({
-
-distance:distance,
-
-alive:lives>0,
-
-coins:coins,
-
-stars:stars
-
-});
-
-}
-
-
-/* DESENHAR */
-
-drawGame(playerY);
-
-
-/* FIM */
-
-if(
-remaining<=0 ||
-lives<=0 ||
-world>=WORLD_END
-){
-
-finishRunner();
+showMessage("Digite seu nome.");
 
 return;
 
 }
 
+try{
 
-animation=
-requestAnimationFrame(gameLoop);
+await waitAuth();
 
-}
+uid=auth.currentUser.uid;
 
+room=Math.random()
+.toString(36)
+.slice(2,8)
+.toUpperCase();
 
-/* PERDER VIDA */
+role="p1";
 
-function loseLife(){
+await db.ref("rooms/"+room).set({
 
-if(lives<=0)return;
+p1:{
+uid:uid,
+name:me,
+score:0,
+distance:0,
+done:false
+},
 
-lives--;
+p2:null,
 
-world=Math.max(0,world-150);
+mode:"quiz",
 
-verticalSpeed=-8;
+status:"lobby",
 
-}
+question:0,
 
+startedAt:0
 
-/* DESENHAR */
+});
 
-function drawGame(playerY){
+openRoom();
 
-ctx.clearRect(
-0,
-0,
-900,
-430
-);
+}catch(error){
 
-
-/* CÉU */
-
-ctx.fillStyle="#82d5ff";
-
-ctx.fillRect(
-0,
-0,
-900,
-430
-);
-
-
-/* NUVENS */
-
-ctx.fillStyle="white";
-
-for(let i=0;i<5;i++){
-
-let x=
-(i*220-
-(world*.12)%220);
-
-ctx.beginPath();
-
-ctx.arc(
-x,
-80,
-25,
-0,
-Math.PI*2
-);
-
-ctx.arc(
-x+30,
-70,
-32,
-0,
-Math.PI*2
-);
-
-ctx.arc(
-x+60,
-80,
-24,
-0,
-Math.PI*2
-);
-
-ctx.fill();
-
-}
-
-
-/* MONTANHAS */
-
-ctx.fillStyle="#8bd279";
-
-ctx.beginPath();
-
-ctx.moveTo(0,300);
-
-for(let x=0;x<=900;x+=80){
-
-ctx.lineTo(
-x,
-250+
-((x+world*.2)%150)/4
+showMessage(
+"Erro ao criar sala: "+error.message,
+true
 );
 
 }
 
-ctx.lineTo(900,330);
-
-ctx.lineTo(0,330);
-
-ctx.fill();
+};
 
 
-/* GRAMA */
+$("joinBtn").onclick=async()=>{
 
-ctx.fillStyle="#66bd58";
+me=$("name").value.trim();
 
-ctx.fillRect(
-0,
-330,
-900,
-100
+room=$("roomInput")
+.value
+.trim()
+.toUpperCase();
+
+if(!me||!room){
+
+showMessage(
+"Digite seu nome e o código da sala."
+);
+
+return;
+
+}
+
+try{
+
+await waitAuth();
+
+uid=auth.currentUser.uid;
+
+const snap=
+await db.ref("rooms/"+room)
+.once("value");
+
+if(!snap.exists()){
+
+showMessage(
+"Sala não encontrada.",
+true
+);
+
+return;
+
+}
+
+const data=snap.val();
+
+if(data.p2){
+
+showMessage(
+"Essa sala já tem dois jogadores.",
+true
+);
+
+return;
+
+}
+
+role="p2";
+
+await db.ref(
+"rooms/"+room+"/p2"
+).set({
+
+uid:uid,
+name:me,
+score:0,
+distance:0,
+done:false
+
+});
+
+openRoom();
+
+}catch(error){
+
+showMessage(
+"Erro ao entrar: "+error.message,
+true
+);
+
+}
+
+};
+
+
+function openRoom(){
+
+showScreen("lobby");
+
+$("roomCode").textContent=room;
+
+if(roomRef){
+
+roomRef.off();
+
+}
+
+roomRef=
+db.ref("rooms/"+room);
+
+roomRef.on("value",snapshot=>{
+
+renderRoom(snapshot.val()||{});
+
+});
+
+}
+
+
+function renderRoom(data){
+
+$("players").innerHTML=
+
+"❤️ "+(data.p1?.name||"")+
+"<br>"+
+(
+data.p2
+?
+"❤️ "+data.p2.name
+:
+"⏳ Aguardando outro jogador..."
 );
 
 
-/* OBSTÁCULOS */
+mode=data.mode||"quiz";
 
-for(const obstacle of obstacles){
+$("quizMode")
+.classList.toggle(
+"selected",
+mode==="quiz"
+);
 
-let screenX=
-obstacle.x-world+220;
+$("raceMode")
+.classList.toggle(
+"selected",
+mode==="race"
+);
+
+
+if(data.status==="quiz"){
+
+showQuiz(data);
+
+}
+
+
+if(data.status==="race"){
+
+showRace(data);
+
+}
+
+}
+
+
+$("quizMode").onclick=()=>{
+
+mode="quiz";
+
+if(room){
+
+db.ref(
+"rooms/"+room+"/mode"
+).set("quiz");
+
+}
+
+};
+
+
+$("raceMode").onclick=()=>{
+
+mode="race";
+
+if(room){
+
+db.ref(
+"rooms/"+room+"/mode"
+).set("race");
+
+}
+
+};
+
+
+$("startBtn").onclick=async()=>{
+
+const snap=
+await db.ref("rooms/"+room)
+.once("value");
+
+const data=snap.val();
+
+if(!data.p1||!data.p2){
+
+$("lobbyMsg").innerHTML=
+'<div class="err">Esperem os dois jogadores entrarem.</div>';
+
+return;
+
+}
+
+await db.ref("rooms/"+room).update({
+
+status:mode,
+
+startedAt:Date.now(),
+
+question:0
+
+});
+
+};
+
+
+function showQuiz(data){
+
+showScreen("quiz");
+
+renderQuiz(data);
+
+}
+
+
+function renderQuiz(data){
+
+if(!data.p1||!data.p2){
+
+return;
+
+}
+
+const mine=data[role];
+
+const other=
+data[
+role==="p1"
+?
+"p2"
+:
+"p1"
+];
+
+$("myScore").innerHTML=
+"Você<br>"+(mine?.score||0);
+
+$("otherScore").innerHTML=
+"Outro<br>"+(other?.score||0);
+
+quizIndex=
+Number(data.question||0);
+
+if(quizIndex!==lastQuestion){
+
+answered=false;
+
+lastQuestion=quizIndex;
+
+}
+
+if(quizIndex>=questions.length){
+
+$("answers").innerHTML="";
+
+$("question").textContent=
+"🏁 Fim!";
+
+$("quizStatus").innerHTML=
+"<b>"+
+data.p1.name+
+": "+
+(data.p1.score||0)+
+" acertos</b><br><b>"+
+data.p2.name+
+": "+
+(data.p2.score||0)+
+" acertos</b><br><br>❤️ Parabéns!";
+
+return;
+
+}
+
+const q=questions[quizIndex];
+
+$("question").textContent=
+(quizIndex+1)+". "+q[0];
+
+if(answered){
+
+return;
+
+}
+
+$("answers").innerHTML="";
+
+q.slice(1,5).forEach((answer,index)=>{
+
+const button=
+document.createElement("button");
+
+button.textContent=answer;
+
+button.onclick=()=>answerQuiz(index);
+
+$("answers").appendChild(button);
+
+});
+
+}
+
+
+async function answerQuiz(index){
+
+if(answered){
+
+return;
+
+}
+
+answered=true;
+
+const q=questions[quizIndex];
+
+const correct=
+index===q[5];
+
+if(correct){
+
+await db.ref(
+"rooms/"+room+"/"+role+"/score"
+).transaction(
+value=>(value||0)+1
+);
+
+}
+
+await db.ref(
+"rooms/"+room+"/"+role+"/lastAnswer"
+).set(quizIndex);
+
+$("quizStatus").textContent=
+correct
+?
+"✅ Acertou!"
+:
+"❌ Errou!";
+
+
+setTimeout(async()=>{
+
+const snap=
+await db.ref("rooms/"+room)
+.once("value");
+
+const data=snap.val();
+
+const a=data.p1?.lastAnswer;
+
+const b=data.p2?.lastAnswer;
 
 if(
-screenX>-100 &&
-screenX<950
+a===quizIndex &&
+b===quizIndex
 ){
 
-ctx.fillStyle="#8b3b2e";
+await db.ref("rooms/"+room)
+.update({
+question:quizIndex+1
+});
 
-ctx.fillRect(
-screenX,
-330-obstacle.height,
-obstacle.width,
-obstacle.height
-);
+await db.ref(
+"rooms/"+room+"/p1/lastAnswer"
+).remove();
 
-ctx.fillStyle="#5d2821";
-
-ctx.fillRect(
-screenX+8,
-340-obstacle.height,
-8,
-8
-);
+await db.ref(
+"rooms/"+room+"/p2/lastAnswer"
+).remove();
 
 }
+
+},350);
 
 }
 
 
-/* MOEDAS */
+function showRace(data){
 
-for(const item of coinItems){
+if(!raceStarted){
 
-if(item.taken)continue;
+raceStarted=true;
 
-let screenX=
-item.x-world+220;
+showScreen("race");
+
+distance=0;
+
+coins=0;
+
+stars=0;
+
+jumping=false;
+
+$("raceStatus")
+.classList.add("hidden");
+
+startRaceLoops();
+
+}
+
+renderRace(data);
+
+}
+
+
+function renderRace(data){
+
+if(!data.p1||!data.p2){
+
+return;
+
+}
+
+const other=
+data[
+role==="p1"
+?
+"p2"
+:
+"p1"
+];
+
+$("otherDistance").textContent=
+Math.floor(other?.distance||0)+
+" m";
+
+const elapsed=
+Math.floor(
+(Date.now()-(data.startedAt||Date.now()))
+/1000
+);
+
+const remaining=
+Math.max(0,90-elapsed);
+
+$("time").textContent=
+remaining+"s";
+
+if(remaining<=0&&!data[role]?.done){
+
+finishRace();
+
+}
 
 if(
-screenX>-30 &&
-screenX<930
+data.p1.done &&
+data.p2.done
 ){
 
-ctx.fillStyle="#ffd43b";
+showFinalRace(data);
 
-ctx.beginPath();
+}
 
-ctx.arc(
-screenX,
-item.y,
-11,
+}
+
+
+function startRaceLoops(){
+
+clearInterval(moveTimer);
+
+clearInterval(sendTimer);
+
+clearInterval(raceTimer);
+
+
+moveTimer=setInterval(()=>{
+
+if(!raceStarted){
+
+return;
+
+}
+
+distance+=0.35;
+
+if(left){
+
+distance=
+Math.max(
 0,
-Math.PI*2
-);
-
-ctx.fill();
-
-}
-
-}
-
-
-/* ESTRELAS */
-
-for(const item of starItems){
-
-if(item.taken)continue;
-
-let screenX=
-item.x-world+220;
-
-if(
-screenX>-30 &&
-screenX<930
-){
-
-ctx.fillStyle="#fff16b";
-
-ctx.font="30px Arial";
-
-ctx.fillText(
-"★",
-screenX-15,
-item.y
+distance-0.7
 );
 
 }
 
+if(right){
+
+distance+=1.05;
+
 }
 
+coins=
+Math.floor(distance/35);
 
-/* INIMIGOS */
+stars=
+Math.floor(distance/180);
 
-for(const enemy of enemyItems){
+updateWorld();
 
-let screenX=
-enemy.x-world+220;
+$("myDistance").textContent=
+Math.floor(distance)+" m";
 
-if(
-screenX>-40 &&
-screenX<940
-){
+},50);
 
-ctx.fillStyle="#9b45b7";
 
-ctx.beginPath();
+sendTimer=setInterval(()=>{
 
-ctx.arc(
-screenX,
-300,
-18,
+if(raceStarted){
+
+db.ref(
+"rooms/"+room+
+"/"+role+
+"/distance"
+).set(
+Math.floor(distance)
+);
+
+}
+
+},250);
+
+
+raceTimer=setInterval(async()=>{
+
+const snap=
+await db.ref("rooms/"+room)
+.once("value");
+
+const data=snap.val();
+
+if(data?.startedAt){
+
+const remaining=
+Math.max(
 0,
-Math.PI*2
+90-
+Math.floor(
+(Date.now()-data.startedAt)/1000
+)
 );
 
-ctx.fill();
+$("time").textContent=
+remaining+"s";
 
-ctx.fillStyle="white";
+if(
+remaining<=0
+){
 
-ctx.fillRect(
-screenX-9,
-293,
-6,
-6
-);
-
-ctx.fillRect(
-screenX+4,
-293,
-6,
-6
-);
+finishRace();
 
 }
 
 }
 
+},500);
 
-/* FINAL */
+}
 
-if(world>WORLD_END-300){
 
-ctx.fillStyle="white";
+function updateWorld(){
 
-ctx.fillRect(
-800,
-80,
-6,
-250
-);
+$("player").style.left=
+(55+(distance%260))+"px";
 
-ctx.fillStyle="#ffcf3d";
+$("player").style.bottom=
+jumping
+?
+"135px"
+:
+"55px";
 
-ctx.fillRect(
-806,
-80,
-80,
-45
-);
+$("enemy1").style.left=
+(260-(distance%360))+"px";
 
-ctx.fillStyle="#222";
+$("enemy2").style.left=
+(430-(distance%500))+"px";
 
-ctx.font="bold 14px Arial";
+$("coin1").style.left=
+(180-(distance%240))+"px";
 
-ctx.fillText(
-"FIM!",
-820,
-108
+$("star1").style.left=
+(340-(distance%420))+"px";
+
+$("obstacle1").style.left=
+(520-(distance%560))+"px";
+
+}
+
+
+function jump(){
+
+if(
+jumping||
+!raceStarted
+){
+
+return;
+
+}
+
+jumping=true;
+
+updateWorld();
+
+setTimeout(()=>{
+
+jumping=false;
+
+updateWorld();
+
+},650);
+
+}
+
+
+async function finishRace(){
+
+if(!raceStarted){
+
+return;
+
+}
+
+await db.ref(
+"rooms/"+room+"/"+role
+).update({
+
+distance:Math.floor(distance),
+
+done:true
+
+});
+
+raceStarted=false;
+
+clearInterval(moveTimer);
+
+clearInterval(sendTimer);
+
+clearInterval(raceTimer);
+
+$("raceStatus")
+.classList.remove("hidden");
+
+$("raceStatus").innerHTML=
+"🏁 Você terminou com <b>"+
+Math.floor(distance)+
+" m</b>!<br>"+
+"🪙 "+coins+
+" moedas • ⭐ "+stars+
+" estrelas.<br>Aguarde o outro jogador...";
+
+}
+
+
+async function showFinalRace(data){
+
+const a=
+Math.floor(data.p1.distance||0);
+
+const b=
+Math.floor(data.p2.distance||0);
+
+$("raceStatus")
+.classList.remove("hidden");
+
+$("raceStatus").innerHTML=
+"🏁 Fim da corrida!<br>"+
+"<b>"+
+data.p1.name+
+": "+
+a+
+" m</b><br>"+
+"<b>"+
+data.p2.name+
+": "+
+b+
+" m</b><br><br>"+
+(
+a>b
+?
+"❤️ "+data.p1.name+" foi mais longe!"
+:
+b>a
+?
+"❤️ "+data.p2.name+" foi mais longe!"
+:
+"🤝 Empate!"
 );
 
 }
 
 
-/* JOGADOR */
+$("copyBtn").onclick=()=>{
 
-let px=220;
+if(
+navigator.clipboard
+){
 
-ctx.fillStyle="#ff5f6d";
+navigator.clipboard
+.writeText(room)
+.then(()=>{
 
-ctx.fillRect(
-px,
-playerY-45,
-36,
-35
+$("lobbyMsg").innerHTML=
+'<div class="ok">Código copiado! ❤️</div>';
+
+});
+
+}
+
+};
+
+
+function holdButton(
+element,
+down,
+up
+){
+
+element.addEventListener(
+"pointerdown",
+event=>{
+
+event.preventDefault();
+
+down();
+
+}
 );
 
-ctx.fillStyle="#222";
+["pointerup","pointercancel","pointerleave"]
+.forEach(eventName=>{
 
-ctx.fillRect(
-px+6,
-playerY-10,
-9,
-12
+element.addEventListener(
+eventName,
+event=>{
+
+event.preventDefault();
+
+up();
+
+}
 );
 
-ctx.fillRect(
-px+22,
-playerY-10,
-9,
-12
-);
+});
 
-ctx.fillStyle="white";
+}
 
-ctx.fillRect(
-px+8,
-playerY-36,
-7,
-7
-);
 
-ctx.fillRect(
-px+21,
-playerY-36,
-7,
-7
+holdButton(
+$("leftBtn"),
+()=>left=true,
+()=>left=false
 );
 
 
-/* TEXTO */
+holdButton(
+$("rightBtn"),
+()=>right=true,
+()=>right=false
+);
 
-ctx.fillStyle="white";
+
+$("jumpBtn").addEventListener(
+"pointerdown",
+event=>{
+
+event.preventDefault();
+
+jump();
+
+}
+);
+
+
+document.addEventListener(
+"keydown",
+event=>{
+
+if(
+event.key==="ArrowLeft"
+){
+
+left=true;
+
+}
+
+if(
+event.key==="ArrowRight"
+){
+
+right=true;
+
+}
+
+if(
+event.key==="ArrowUp"||
+event.key===" "
+){
+
+jump();
+
+}
+
+}
+);
+
+
+document.addEventListener(
+"keyup",
+event=>{
+
+if(
+event.key==="ArrowLeft"
+){
+
+left=false;
+
+}
+
+if(
+event.key==="ArrowRight"
+){
+
+right=false;
+
+}
+
+}
+);
+
+</script>
+
+</body>
+</html>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
