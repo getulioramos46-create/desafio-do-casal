@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>Desafio do Casal ❤️</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#351238,#741f58);color:#2d1835;min-height:100vh}main{max-width:760px;margin:auto;padding:10px}.card{background:#fff;border-radius:26px;padding:19px;margin:10px 0;box-shadow:0 12px 35px #0005}h1{font-size:29px;text-align:center;margin:5px 0 16px}h2{text-align:center}input{width:100%;padding:15px;border:2px solid #ddd;border-radius:14px;font-size:18px;margin:7px 0}button{border:0;border-radius:15px;padding:14px 17px;font-size:17px;font-weight:800;cursor:pointer;touch-action:manipulation}.primary{background:#ff7067;color:#fff;width:100%;margin-top:10px}.secondary{background:#eee;color:#321b39;width:100%;margin-top:10px}.hidden{display:none!important}.mode{position:relative;display:flex;align-items:center;gap:13px;padding:14px;border:2px solid #eee;border-radius:20px;margin:9px 0;text-align:left;cursor:pointer;background:#fff;transition:.18s;box-shadow:0 5px 14px #0000000a}.mode:hover{transform:translateY(-1px)}.mode.selected{border-color:#ff7067;background:linear-gradient(135deg,#fff7f6,#fff0ee);box-shadow:0 7px 18px #ff706722}.mode-icon{width:50px;height:50px;flex:0 0 50px;border-radius:16px;background:#f5eef6;display:flex;align-items:center;justify-content:center;font-size:27px}.mode-copy{flex:1}.mode-title{font-size:17px;font-weight:900;margin-bottom:3px}.mode-desc{font-size:13px;opacity:.72;line-height:1.35}.mode-arrow{font-size:22px;opacity:.35}.mode.selected .mode-arrow{opacity:1}.lobby-head{text-align:center;margin-bottom:16px}.lobby-head h1{margin-bottom:5px}.lobby-sub{margin:0;color:#6d5a70;font-size:14px}.room-box{background:linear-gradient(135deg,#351238,#741f58);color:#fff;border-radius:22px;padding:15px;margin:14px 0;box-shadow:0 10px 22px #35123833}.room-label{text-align:center;font-size:12px;text-transform:uppercase;letter-spacing:2px;opacity:.8}.room{font-size:36px;font-weight:900;letter-spacing:7px;text-align:center;margin:3px 0 4px}.room-help{text-align:center;font-size:12px;opacity:.85}.players,.panel{background:#f4eef6;border-radius:18px;padding:12px;line-height:1.8;text-align:center}.players-title{text-align:left;font-size:13px;font-weight:900;margin-bottom:7px;color:#6d5a70}.player-list{display:flex;gap:8px}.player-pill{flex:1;background:#fff;border:1px solid #eee;border-radius:14px;padding:9px 7px;min-width:0}.player-pill .avatar{font-size:22px;display:block}.player-pill .pname{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.player-pill .pstate{font-size:11px;color:#6d5a70}.games-title{display:flex;align-items:end;justify-content:space-between;margin:20px 0 8px}.games-title h2{margin:0;text-align:left;font-size:20px}.games-title span{font-size:11px;color:#78667b}.mode-list{display:grid;gap:9px}.lobby-actions{margin-top:15px}.lobby-note{font-size:12px;text-align:center;color:#78667b;margin:10px 0 0}.lobby-divider{height:1px;background:#eee;margin:17px 0 4px}@media(max-width:480px){.mode{padding:12px}.mode-icon{width:46px;height:46px;flex-basis:46px}.mode-title{font-size:16px}.room{font-size:32px}}.ok,.err{padding:13px;border-radius:15px;margin-top:12px}.ok{background:#dff6e7;color:#155d35}.err{background:#ffe1e1;color:#8b1c1c}.topbar{display:flex;gap:8px}.topbar>div{flex:1;background:#f3edf6;border-radius:14px;padding:11px;text-align:center;font-weight:bold}.center{text-align:center}.small{font-size:14px;opacity:.75}.grid{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;max-width:480px;margin:13px auto}.cell{aspect-ratio:1;background:#f1eaf4;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:900;padding:0}.cell.selected{background:#ffd7d2}.cell.found{background:#bdeccf;color:#14552d}.word-list{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin:12px 0}.word{background:#eee;padding:8px 11px;border-radius:20px;font-weight:800}.word.done{background:#bdeccf;text-decoration:line-through}.result{font-size:20px;text-align:center;padding:16px;border-radius:18px;background:#fff0d9;margin-top:14px}.notice{font-size:14px;text-align:center;margin-top:10px;color:#5b4b60}.heartgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;max-width:430px;margin:16px auto}.heartcell{aspect-ratio:1;border-radius:14px;background:#f2edf5;font-size:27px;display:flex;align-items:center;justify-content:center;font-weight:900}.heartcell.open{background:#fff0ee}.heartcell.good{background:#ffd7d2}.heartcell.bad{background:#ddd}.memorygrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:430px;margin:16px auto}.mem{aspect-ratio:1;border-radius:14px;background:#5b2355;color:white;display:flex;align-items:center;justify-content:center;font-size:31px;font-weight:900}.mem.open,.mem.matched,.mem.othermatched{background:#fff0ee;color:#2d1835}.mem.selected{outline:3px solid #ff7067}.canvasWrap{background:#f4eef6;border-radius:18px;padding:10px;margin:12px 0}.drawcanvas{width:100%;height:300px;background:white;border-radius:14px;display:block;touch-action:none}.palette{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}.palette button{width:42px;height:42px;padding:0}.rating button{margin:4px;background:#f2edf5}.preview{width:100%;max-height:300px;object-fit:contain;background:#fff;border-radius:14px;margin-top:10px}.gamebtn{width:100%;margin-top:8px;background:#f2edf5}.danger{background:#ffdede}.success{background:#dff6e7}
+@media(max-width:480px){main{padding:7px}.card{padding:16px}.room{font-size:31px}.cell{font-size:17px}.drawcanvas{height:250px}}
+</style></head><body><main>
+<section id="home" class="card"><h1>❤️ Desafio do Casal</h1><p class="center">Mini jogos competitivos para vocês jogarem juntos, cada um no seu celular.</p><input id="name" placeholder="Seu nome" maxlength="24"><button id="createBtn" class="primary">Criar uma sala</button><input id="roomInput" placeholder="Código da sala" maxlength="8"><button id="joinBtn" class="secondary">Entrar em uma sala</button><div id="connection" class="notice">🟢 Pronto. Digite seu nome para começar.</div><div id="message"></div></section>
+<section id="lobby" class="card hidden">
+<div class="lobby-head"><h1>❤️ Desafio do Casal</h1><p class="lobby-sub">A sala está pronta. Escolham uma brincadeira e comecem!</p></div>
+<div class="room-box"><div class="room-label">Código da sala</div><div class="room" id="roomCode"></div><div class="room-help">Compartilhe este código com sua namorada</div></div>
+<div class="players"><div class="players-title">👥 Jogadores na sala</div><div id="players" class="player-list"></div></div>
+<div class="games-title"><h2>🎮 Mini jogos</h2><span>Escolha um para jogar</span></div>
+<div class="mode-list">
+<div id="wordMode" class="mode selected"><div class="mode-icon">🔎</div><div class="mode-copy"><div class="mode-title">Caça-palavras</div><div class="mode-desc">Encontre as palavras e descubra quem termina primeiro.</div></div><div class="mode-arrow">›</div></div>
+<div id="drawMode" class="mode"><div class="mode-icon">🎨</div><div class="mode-copy"><div class="mode-title">Desenho Relâmpago</div><div class="mode-desc">Desenhem o mesmo tema e avaliem os desenhos um do outro.</div></div><div class="mode-arrow">›</div></div>
+<div id="heartMode" class="mode"><div class="mode-icon">💎</div><div class="mode-copy"><div class="mode-title">Caça aos Corações</div><div class="mode-desc">Encontre os pontos e fuja das bombas antes do tempo acabar.</div></div><div class="mode-arrow">›</div></div>
+<div id="memoryMode" class="mode"><div class="mode-icon">🧠</div><div class="mode-copy"><div class="mode-title">Memória Competitiva</div><div class="mode-desc">Encontre os pares e faça mais pontos que seu parceiro.</div></div><div class="mode-arrow">›</div></div>
+<div id="challengeMode" class="mode"><div class="mode-icon">💘</div><div class="mode-copy"><div class="mode-title">Desafios do Casal</div><div class="mode-desc">Respondam juntos: “Eu fiz!” ou “Não fiz”.</div></div><div class="mode-arrow">›</div></div>
+</div>
+<div class="lobby-actions"><button id="startBtn" class="primary">🎮 Começar jogo</button><button id="copyBtn" class="secondary">📋 Copiar código</button></div>
+<div class="lobby-divider"></div><p class="lobby-note">💡 Os dois precisam estar na sala para iniciar o jogo.</p>
+<button class="secondary" id="backHomeLobby">🏠 Voltar ao início</button><div id="lobbyMsg"></div></section>
+
+<section id="wordgame" class="card hidden"><h1>🔎 Caça-palavras</h1><p class="center">Cada um joga sozinho no próprio celular. Não precisa esperar o outro.</p><div class="topbar"><div id="wMe">Você<br>0/10</div><div id="wOther">Outro<br>0/10</div></div><div id="wordList" class="word-list"></div><div id="wordGrid" class="grid"></div><div id="wordStatus" class="ok">Encontre a primeira palavra.</div><button class="secondary" id="backWord">Voltar para a sala</button><button class="secondary" id="homeWord">🏠 Voltar ao início</button></section>
+
+<section id="drawgame" class="card hidden"><h1>🎨 Desenho Relâmpago</h1><div class="topbar"><div id="drawRound">Rodada<br>1/5</div><div id="drawScore">Placar<br>0 × 0</div></div><div class="panel"><b>Tema:</b><div id="drawPrompt" style="font-size:24px;margin-top:7px">Aguardando...</div><div class="small">Vocês têm 45 segundos para desenhar.</div></div><div class="canvasWrap"><canvas id="drawCanvas" class="drawcanvas" width="600" height="400"></canvas><div class="palette"><button data-color="#111" style="background:#111" aria-label="preto"></button><button data-color="#e33" style="background:#e33" aria-label="vermelho"></button><button data-color="#2583e8" style="background:#2583e8" aria-label="azul"></button><button data-color="#2c9b4b" style="background:#2c9b4b" aria-label="verde"></button><button data-color="#f2b632" style="background:#f2b632" aria-label="amarelo"></button><button data-color="#9b42c8" style="background:#9b42c8" aria-label="roxo"></button></div><button id="clearDraw" class="secondary">🧹 Apagar desenho</button></div><div id="drawStatus" class="ok">Desenhe!</div><button id="submitDraw" class="primary">🎨 Enviar meu desenho</button><div id="rateArea" class="hidden panel"><b>Agora dê uma nota de 1 a 5 para o desenho do outro:</b><img id="otherDrawing" class="preview"><div class="rating" id="ratingButtons"></div></div><button class="secondary" id="backDraw">Voltar para a sala</button><button class="secondary" id="homeDraw">🏠 Voltar ao início</button></section>
+
+<section id="heartgame" class="card hidden"><h1>💎 Caça aos Corações</h1><div class="topbar"><div id="hMe">Você<br>0</div><div id="hOther">Outro<br>0</div><div id="hTime">Tempo<br>45s</div></div><p class="center">❤️ +10 &nbsp; 💛 +25 &nbsp; 💣 -10</p><div id="heartTurn" class="notice">Cada um joga na sua vez.</div><div id="heartGrid" class="heartgrid"></div><div id="heartStatus" class="ok">Encontre o máximo de pontos!</div><button class="secondary" id="backHeart">Voltar para a sala</button><button class="secondary" id="homeHeart">🏠 Voltar ao início</button></section>
+
+<section id="memorygame" class="card hidden"><h1>🧠 Memória Competitiva</h1><div class="topbar"><div id="mMe">Você<br>0</div><div id="mOther">Outro<br>0</div><div id="mPairs">Pares<br>0/8</div></div><p class="center">Cada jogador tem seu próprio tabuleiro. Vocês jogam alternadamente. Os cliques e pares encontrados aparecem para os dois.</p><div id="memoryGrid" class="memorygrid"></div><div id="memoryStatus" class="ok">Escolha duas cartas.</div><button class="secondary" id="backMemory">Voltar para a sala</button><button class="secondary" id="homeMemory">🏠 Voltar ao início</button></section>
+
+<section id="challengegame" class="card hidden"><h1>💘 Desafios do casal</h1><div class="topbar"><div id="cRound">Desafio<br>1/10</div><div id="cDone">Concluídos<br>0</div></div><div id="challengeText" style="font-size:22px;line-height:1.45;text-align:center;background:#fff1ee;border-radius:20px;padding:22px;margin:15px 0">Aguardando...</div><button id="doneChallenge" class="primary">✅ Eu fiz!</button><button id="notChallenge" class="secondary danger">❌ Não fiz</button><p id="challengeStatus" class="center">Façam juntos e cada um marca sua resposta.</p><button class="secondary" id="backChallenge">Voltar para a sala</button><button class="secondary" id="homeChallenge">🏠 Voltar ao início</button></section>
+</main>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig={apiKey:"AIzaSyAVe7-GphkUEsnoM71F9XgpePBNFnzPDp4",authDomain:"desafio-do-casal-ccca5.firebaseapp.com",projectId:"desafio-do-casal-ccca5",storageBucket:"desafio-do-casal-ccca5.firebasestorage.app",messagingSenderId:"406184390414",appId:"1:406184390414:web:a22f6a98abf4dc5479b15f",databaseURL:"https://desafio-do-casal-ccca5-default-rtdb.firebaseio.com/"};
+firebase.initializeApp(firebaseConfig);const auth=firebase.auth(),db=firebase.database();let uid="",room="",role="",mode="word",roomRef=null,selectedCell=null,board=null,drawColor="#111",drawing=false,drawStart=null,drawTimer=null,heartTimer=null,memoryOpen=[],memoryLock=false,memoryBoard=[];
+const $=id=>document.getElementById(id);const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const words=["AMOR","BEIJO","PRAIA","VIDA","CASAL","CARINHO","SORRISO","ABRACO","FELIZ","SAUDADE"];
+const placements=[
+[[7,3],[7,2],[7,1],[7,0]],[[7,6],[6,6],[5,6],[4,6],[3,6]],[[0,7],[0,6],[0,5],[0,4],[0,3]],[[5,1],[4,1],[3,1],[2,1]],[[2,5],[3,5],[4,5],[5,5],[6,5]],[[7,4],[6,4],[5,4],[4,4],[3,4],[2,4],[1,4]],[[7,7],[6,7],[5,7],[4,7],[3,7],[2,7],[1,7]],[[1,2],[2,2],[3,2],[4,2],[5,2],[6,2]],[[5,3],[4,3],[3,3],[2,3],[1,3]],[[6,0],[5,0],[4,0],[3,0],[2,0],[1,0],[0,0]]
+];
+const challenges=["Façam uma selfie fazendo a mesma careta.","Cada um diga 3 coisas que ama no outro.","Dê um abraço ou beijo de 10 segundos.","Cada um imite o outro por 30 segundos.","Digam juntos uma viagem que gostariam de fazer.","Façam um coração com as mãos e tirem uma foto.","Cada um conte uma lembrança favorita do relacionamento.","Mandem uma mensagem romântica um para o outro.","Escolham uma música que represente vocês.","Digam uma coisa que querem viver juntos no futuro."];
+const drawPrompts=["um coração com asas","vocês dois em um encontro","uma casa dos sonhos","um cachorro engraçado","um lugar que querem visitar","um super-herói romântico","um casal na praia","um sorvete gigante","um presente romântico","um passeio de moto"]
+function msg(t,error=false){$("message").innerHTML=t?`<div class="${error?"err":"ok"}">${t}</div>`:""}function screen(id){["home","lobby","wordgame","drawgame","heartgame","memorygame","challengegame"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden")};function waitAuth(){if(auth.currentUser){uid=auth.currentUser.uid;return Promise.resolve(auth.currentUser)}return auth.signInAnonymously().then(r=>{uid=r.user.uid;return r.user})};auth.onAuthStateChanged(u=>{if(u)uid=u.uid});
+async function createRoom(){const name=$("name").value.trim();if(!name)return msg("Digite seu nome.",true);$("createBtn").disabled=true;msg("🔄 Criando sala...");try{const u=await waitAuth();uid=u.uid;room=Math.random().toString(36).slice(2,8).toUpperCase();role="p1";await db.ref("rooms/"+room).set({p1:{uid,name,score:0},p2:null,mode:"word",status:"lobby",wordFound:{p1:0,p2:0},wordBoard:null,wordFinishedAt:{p1:null,p2:null},draw:{round:1,prompt:drawPrompts[0],drawings:{p1:null,p2:null},ratings:{p1:null,p2:null},score1:0,score2:0},heart:{startedAt:null,board:null,revealed:{p1:{},p2:{}},score1:0,score2:0,finished:false},memory:{board:null,matched:{p1:{},p2:{}},score1:0,score2:0,finished:{p1:false,p2:false}},challenge:{index:0,p1:null,p2:null}});openRoom();msg("")}catch(e){room="";role="";msg("Não foi possível criar a sala.<br><small>"+esc(e.message)+"</small>",true)}finally{$("createBtn").disabled=false}}
+async function joinRoom(){const name=$("name").value.trim(),code=$("roomInput").value.trim().toUpperCase();if(!name)return msg("Digite seu nome.",true);if(!/^[A-Z0-9]{4,8}$/.test(code))return msg("Digite um código de sala válido.",true);$("joinBtn").disabled=true;msg("🔄 Entrando na sala...");try{const u=await waitAuth();uid=u.uid;room=code;const ref=db.ref("rooms/"+room),snap=await ref.once("value");if(!snap.exists())throw new Error("Sala não encontrada. Confira o código.");const d=snap.val();if(d.p1?.uid===uid)throw new Error("Você já está no jogador 1 desta sala.");if(d.p2&&d.p2.uid!==uid)throw new Error("Essa sala já está completa.");const tr=await ref.child("p2").transaction(v=>v||{uid,name,score:0});if(tr.snapshot.val()?.uid!==uid)throw new Error("Essa sala já está completa.");role="p2";openRoom();msg("")}catch(e){room="";role="";msg("Não foi possível entrar.<br><small>"+esc(e.message)+"</small>",true)}finally{$("joinBtn").disabled=false}}
+$("createBtn").onclick=createRoom;$("joinBtn").onclick=joinRoom;
+function openRoom(){screen("lobby");$("roomCode").textContent=room;if(roomRef)roomRef.off();roomRef=db.ref("rooms/"+room);roomRef.on("value",s=>render(s.val()||{}))}
+function render(d){$("players").innerHTML='<div class="player-pill"><span class="avatar">❤️</span><span class="pname">'+esc(d.p1?.name||'Jogador 1')+'</span><span class="pstate">Pronto</span></div>'+(d.p2?'<div class="player-pill"><span class="avatar">❤️</span><span class="pname">'+esc(d.p2.name)+'</span><span class="pstate">Pronto</span></div>':'<div class="player-pill"><span class="avatar">⏳</span><span class="pname">Aguardando</span><span class="pstate">Envie o código</span></div>');mode=d.mode||"word";["word","draw","heart","memory","challenge"].forEach(m=>$(m+"Mode").classList.toggle("selected",mode===m));if(d.status==="word")showWord(d);else if(d.status==="draw")showDraw(d);else if(d.status==="heart")showHeart(d);else if(d.status==="memory")showMemory(d);else if(d.status==="challenge")showChallenge(d);else screen("lobby")}
+function selectMode(m){mode=m;if(room)db.ref("rooms/"+room+"/mode").set(m)}["word","draw","heart","memory","challenge"].forEach(m=>$(m+"Mode").onclick=()=>selectMode(m));
+function makeBoard(){const g=Array.from({length:8},()=>Array(8).fill(""));
+placements.forEach((p,i)=>p.forEach(([r,c],k)=>g[r][c]=words[i][k]));
+const abc="QWERTYUIOPASDFGHJKLZXCVBNM";let n=0;
+for(let r=0;r<8;r++)for(let c=0;c<8;c++)if(!g[r][c])g[r][c]=abc[n++%abc.length];
+return g}
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function makeHeartBoard(){let a=Array(36).fill("none");shuffle([...Array(10).fill("heart"),...Array(2).fill("gold"),...Array(5).fill("bomb")]).forEach((v,i)=>a[i]=v);return a}
+function makeMemoryBoard(){return shuffle(["🐶","🐱","🐰","🦊","🐼","🐸","🐵","🐨","🐶","🐱","🐰","🦊","🐼","🐸","🐵","🐨"])}
+$("startBtn").onclick=async()=>{
+ const d=(await db.ref("rooms/"+room).once("value")).val();
+ if(!d.p1||!d.p2){$("lobbyMsg").innerHTML='<div class="err">Esperem os dois jogadores entrarem.</div>';return}
+ let x={status:mode};
+ if(mode==="word")x={status:"word",wordFound:{p1:0,p2:0},wordBoard:makeBoard(),wordPlacements:placements,wordFinishedAt:{p1:null,p2:null}};
+ if(mode==="draw"){x={status:"draw",draw:{round:1,prompt:drawPrompts[0],drawings:{p1:null,p2:null},ratings:{p1:null,p2:null},score1:0,score2:0,finished:false}};clearCanvas()}
+ if(mode==="heart")x={status:"heart",heart:{startedAt:Date.now(),board:makeHeartBoard(),revealed:{p1:{},p2:{}},score1:0,score2:0,turn:"p1",lastMove:null,finished:false}};
+ if(mode==="memory"){memoryBoard=[];memoryOpen=[];memoryLock=false;x={status:"memory",memory:{board:makeMemoryBoard(),matched:{p1:{},p2:{}},score1:0,score2:0,turn:"p1",temp:{p1:null,p2:null},lastMove:null,finished:{p1:false,p2:false}}}}
+ if(mode==="challenge")x={status:"challenge",challenge:{index:0,p1:null,p2:null}};
+ await db.ref("rooms/"+room).update(x)
+};
+$("copyBtn").onclick=async()=>{try{await navigator.clipboard.writeText(room);$("lobbyMsg").innerHTML='<div class="ok">Código copiado! ❤️</div>'}catch(e){$("lobbyMsg").innerHTML='<div class="ok">Código: <b>'+esc(room)+'</b></div>'}};
+function backLobby(){if(room)db.ref("rooms/"+room+"/status").set("lobby");screen("lobby")}function backHome(){if(roomRef){roomRef.off();roomRef=null}room="";role="";screen("home")}$("backHomeLobby").onclick=backHome;["backWord","backDraw","backHeart","backMemory","backChallenge"].forEach(id=>$(id).onclick=backLobby);["homeWord","homeDraw","homeHeart","homeMemory","homeChallenge"].forEach(id=>$(id).onclick=backHome);
+function showWord(d){screen("wordgame");board=d.wordBoard||makeBoard();const me=+((d.wordFound||{})[role]||0),other=+((d.wordFound||{})[role==="p1"?"p2":"p1"]||0);$("wMe").innerHTML="Você<br>"+me+"/10";$("wOther").innerHTML="Outro<br>"+other+"/10";$("wordList").innerHTML=words.map((w,i)=>`<span class="word ${i<me?"done":""}">${w}</span>`).join("");$("wordStatus").textContent=me>=10?"🏁 Você terminou!":me>other?"🔥 Você está na frente!":"Encontre a próxima palavra!";renderWordGrid(d)}
+function renderWordGrid(d){$("wordGrid").innerHTML="";for(let r=0;r<8;r++)for(let c=0;c<8;c++){const b=document.createElement("button");b.className="cell";b.textContent=board[r][c];b.onclick=()=>wordTap(r,c,d);if(selectedCell?.r===r&&selectedCell?.c===c)b.classList.add("selected");$("wordGrid").appendChild(b)}const done=+((d.wordFound||{})[role]||0),paths=d.wordPlacements||placements;for(let i=0;i<done;i++)(paths[i]||[]).forEach(([r,c])=>{const el=$("wordGrid").children[r*8+c];if(el)el.classList.add("found")})}
+async function wordTap(r,c,d){const my=+((d.wordFound||{})[role]||0);if(my>=words.length)return;if(!selectedCell){selectedCell={r,c};renderWordGrid(d);return}const a=selectedCell;selectedCell=null;const dr=Math.sign(r-a.r),dc=Math.sign(c-a.c);if(dr&&dc){$("wordStatus").textContent="Use uma linha horizontal ou vertical.";renderWordGrid(d);return}const len=Math.max(Math.abs(r-a.r),Math.abs(c-a.c))+1;if(len<2){renderWordGrid(d);return}let text="";for(let k=0;k<len;k++)text+=board[a.r+dr*k]?.[a.c+dc*k]||"";const target=words[my];if(text===target||text.split("").reverse().join("")===target){await db.ref("rooms/"+room+"/wordFound/"+role).set(my+1);if(my+1===words.length)await db.ref("rooms/"+room+"/wordFinishedAt/"+role).set(Date.now());$("wordStatus").textContent="✅ "+target+" encontrada!"}else $("wordStatus").textContent="❌ Não é a próxima palavra.";const latest=(await db.ref("rooms/"+room).once("value")).val();renderWordGrid(latest)}
+
+const canvas=$("drawCanvas"),ctx=canvas.getContext("2d");let drawInitialized=false,drawShownRound=0;function resizeCanvas(){if(drawInitialized)return;canvas.width=600;canvas.height=400;ctx.fillStyle="#fff";ctx.fillRect(0,0,600,400);drawInitialized=true}function pos(e){const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)*600/r.width,y:(e.clientY-r.top)*400/r.height}}canvas.addEventListener("pointerdown",e=>{drawing=true;drawStart=pos(e);ctx.beginPath();ctx.moveTo(drawStart.x,drawStart.y)});canvas.addEventListener("pointermove",e=>{if(!drawing)return;const p=pos(e);ctx.strokeStyle=drawColor;ctx.lineWidth=7;ctx.lineCap="round";ctx.lineTo(p.x,p.y);ctx.stroke()});window.addEventListener("pointerup",()=>drawing=false);document.querySelectorAll("[data-color]").forEach(b=>b.onclick=()=>drawColor=b.dataset.color);function clearCanvas(){ctx.clearRect(0,0,600,400);ctx.fillStyle="#fff";ctx.fillRect(0,0,600,400);drawing=false}
+$("clearDraw").onclick=()=>{if(!$("submitDraw").disabled){clearCanvas();$("drawStatus").textContent="🧹 Desenho apagado. Pode desenhar novamente."}}
+function showDraw(d){
+ screen("drawgame");
+ const z=d.draw||{},i=Math.max(0,(z.round||1)-1);
+ $("drawRound").innerHTML="Rodada<br>"+(i+1)+"/5";
+ $("drawScore").innerHTML="Placar<br>"+(z.score1||0)+" × "+(z.score2||0);
+ $("drawPrompt").textContent=z.prompt||drawPrompts[i]||drawPrompts[0];
+ const mine=z.drawings?.[role],other=z.drawings?.[role==="p1"?"p2":"p1"];
+ $("submitDraw").disabled=!!mine;
+ $("clearDraw").disabled=!!mine;
+ $("drawStatus").textContent=mine?"✅ Seu desenho foi enviado. Aguarde o outro.":"Desenhe!";
+ 
+ if(mine&&other&&z.ratings?.[role]==null){
+   $("rateArea").classList.remove("hidden");$("otherDrawing").src=other;
+   $("ratingButtons").innerHTML=[1,2,3,4,5].map(n=>`<button onclick="rateDraw(${n})">${n} ⭐</button>`).join("");
+ }else $("rateArea").classList.add("hidden");
+ if(z.finished)$("drawStatus").textContent="🏁 Partida encerrada! Placar: "+z.score1+" × "+z.score2;
+}
+$("submitDraw").onclick=async()=>{
+ if($("submitDraw").disabled)return;
+ const data=canvas.toDataURL("image/jpeg",.65);
+ await db.ref("rooms/"+room+"/draw/drawings/"+role).set(data);
+ $("submitDraw").disabled=true;$("clearDraw").disabled=true;
+ $("drawStatus").textContent="⏳ Aguarde o outro desenho.";
+};
+async function rateDraw(n){
+ const ref=db.ref("rooms/"+room+"/draw/ratings/"+role);
+ const snap=await ref.once("value");if(snap.exists())return;
+ await ref.set(n);
+ const d=(await db.ref("rooms/"+room).once("value")).val(),z=d.draw||{};
+ if(z.ratings?.p1!=null&&z.ratings?.p2!=null){
+   const score1=(z.score1||0)+(z.ratings.p2||0),score2=(z.score2||0)+(z.ratings.p1||0);
+   if((z.round||1)>=5){
+     await db.ref("rooms/"+room+"/draw").update({score1,score2,finished:true});
+   }else{
+     const next=(z.round||1)+1;
+     await db.ref("rooms/"+room+"/draw").set({round:next,prompt:drawPrompts[next-1],drawings:{p1:null,p2:null},ratings:{p1:null,p2:null},score1,score2,finished:false});
+     clearCanvas();
+   }
+ }
+}
+function showHeart(d){
+ screen("heartgame");
+ const z=d.heart||{},rev=z.revealed||{},score=z["score"+(role==="p1"?"1":"2")]||0,other=z["score"+(role==="p1"?"2":"1")]||0;
+ $("hMe").innerHTML="Você<br>"+score;$("hOther").innerHTML="Outro<br>"+other;
+ let left=Math.max(0,45-Math.floor((Date.now()-(z.startedAt||Date.now()))/1000));
+ $("hTime").innerHTML="Tempo<br>"+left+"s";
+ const turn=z.turn||"p1";
+ $("heartTurn").textContent=z.finished?"🏁 Partida encerrada!":turn===role?"🟢 Sua vez — escolha uma casa":"🟣 Vez do outro jogador — acompanhe onde ele clicou";
+ renderHeartGrid(z);
+ const lm=z.lastMove;
+ if(z.finished)$("heartStatus").textContent=score>other?"🏆 Você venceu!":other>score?"🏆 O outro venceu!":"🤝 Empate!";
+ else if(lm)$("heartStatus").textContent=lm.role===role?"Você encontrou "+(lm.item==="bomb"?"💣 BOMBA":lm.item==="gold"?"💛 CORAÇÃO DOURADO":"❤️ CORAÇÃO")+" ("+lm.points+" pontos).":"Ela/ele clicou na casa "+(lm.cell+1)+" e encontrou "+(lm.item==="bomb"?"💣 BOMBA":lm.item==="gold"?"💛 CORAÇÃO DOURADO":"❤️ CORAÇÃO")+" ("+lm.points+" pontos).";
+ else $("heartStatus").textContent="❤️ +10 • 💛 +25 • 💣 -10";
+ if(left<=0&&!z.finished)db.ref("rooms/"+room+"/heart/finished").set(true);
+ else if(!z.finished){clearTimeout(heartTimer);heartTimer=setTimeout(async()=>{const snap=await db.ref("rooms/"+room).once("value");showHeart(snap.val())},1000)}
+}
+function renderHeartGrid(z){
+ const arr=z.board||[],rev=z.revealed||{},myRev=rev[role]||{},otherRole=role==="p1"?"p2":"p1",otherRev=rev[otherRole]||{};
+ $("heartGrid").innerHTML=arr.map((v,i)=>{const mine=myRev[i],theirs=otherRev[i],open=mine||theirs;
+ return `<button class="heartcell ${open?('open '+(v==='bomb'?'bad':'good')):''}" ${z.finished||z.turn!==role||mine||theirs?'disabled':''} onclick="openHeart(${i})">${open?(v==='heart'?'❤️':v==='gold'?'💛':'💣'):'?'}</button>`}).join("")
+}
+async function openHeart(i){
+ const ref=db.ref("rooms/"+room+"/heart"),d=(await ref.parent.once("value")).val(),z=d.heart||{};
+ if(z.finished||z.turn!==role||z.revealed?.p1?.[i]||z.revealed?.p2?.[i])return;
+ const v=z.board?.[i];if(!v)return;
+ const pts=v==="heart"?10:v==="gold"?25:-10;
+ const nextTurn=role==="p1"?"p2":"p1";
+ const updates={};updates["revealed/"+role+"/"+i]=true;updates.lastMove={role,cell:i,item:v,points:pts,at:Date.now()};
+ updates["score"+(role==="p1"?"1":"2")]=(z["score"+(role==="p1"?"1":"2")]||0)+pts;
+ updates.turn=nextTurn;await ref.update(updates);
+ const latest=await ref.once("value"),h=latest.val()||{};
+ if(Object.keys(h.revealed?.p1||{}).length+Object.keys(h.revealed?.p2||{}).length>=17)await ref.child("finished").set(true);
+}
+function showMemory(d){
+ screen("memorygame");const z=d.memory||{};
+ if(!memoryBoard.length||memoryBoard.join("|")!==(z.board||[]).join("|")){memoryBoard=z.board||makeMemoryBoard();memoryOpen=[];memoryLock=false}
+ const me=z["score"+(role==="p1"?"1":"2")]||0,other=z["score"+(role==="p1"?"2":"1")]||0,matched=z.matched?.[role]||{};
+ $("mMe").innerHTML="Você<br>"+me;$("mOther").innerHTML="Outro<br>"+other;$("mPairs").innerHTML="Pares<br>"+Math.floor(Object.keys(matched).length/2)+"/8";
+ const turn=z.turn||"p1";
+ $("memoryStatus").textContent=z.finished?.[role]?"🏁 Você encontrou todos os pares!":turn===role?"🟢 Sua vez — escolha duas cartas":"🟣 Vez do outro — acompanhe os cliques e pares encontrados";
+ renderMemory(z);
+}
+function renderMemory(z){
+ const matched=z.matched?.[role]||{},allMatched=z.matched||{},otherRole=role==="p1"?"p2":"p1",otherMatched=allMatched[otherRole]||{},last=z.lastMove,recent=z.recentClicks||[];
+ $("memoryGrid").innerHTML=memoryBoard.map((v,i)=>{
+   const mine=matched[i],theirs=otherMatched[i],open=mine||theirs||memoryOpen.includes(i);
+   let cls=open?"open ":"";if(mine)cls+="matched ";if(theirs)cls+="othermatched ";if(recent.some(x=>x.cell===i&&x.role===otherRole))cls+="selected";
+   return `<button class="mem ${cls}" ${z.finished?.[role]||z.turn!==role||mine||theirs?'disabled':''} onclick="memoryTap(${i})">${open?v:'?'}</button>`
+ }).join("");
+ if(last){
+   $("memoryStatus").textContent=last.role===role
+    ?"🟢 Você clicou na carta "+(last.cell+1)+(last.matched?" e achou um par!":" — não formou par.")
+    :"🟣 O outro clicou na carta "+(last.cell+1)+(last.matched?" e achou um par!":" — não formou par.");
+ }
+}
+async function memoryTap(i){
+ const ref=db.ref("rooms/"+room+"/memory"),d=(await ref.parent.once("value")).val(),z=d.memory||{};
+ if(z.turn&&z.turn!==role||z.finished?.[role]||z.matched?.[role]?.[i]||memoryLock)return;
+ const otherRole=role==="p1"?"p2":"p1",temp=z.temp?.[role];
+ if(!temp){
+   const recent=[...(z.recentClicks||[]),{role,cell:i,matched:false}].slice(-2);
+   await ref.update({["temp/"+role]:{cell:i},lastMove:{role,cell:i,matched:false},recentClicks:recent});
+   return;
+ }
+ if(temp.cell===i)return;
+ memoryLock=true;
+ const a=temp.cell,b=i,good=memoryBoard[a]===memoryBoard[b];
+ const recent=[...(z.recentClicks||[]),{role,cell:a,matched:false},{role,cell:b,matched:good}].slice(-4);
+ const updates={lastMove:{role,cell:b,matched:good},recentClicks:recent,turn:otherRole};updates["temp/"+role]=null;
+ if(good){
+   updates["matched/"+role+"/"+a]=true;updates["matched/"+role+"/"+b]=true;
+   updates["score"+(role==="p1"?"1":"2")]=(z["score"+(role==="p1"?"1":"2")]||0)+1;
+   updates["finished/"+role]=Object.keys(z.matched?.[role]||{}).length+2>=16;
+ }
+ await ref.update(updates);memoryOpen=[];memoryLock=false;
+ const latest=(await ref.parent.once("value")).val();renderMemory(latest.memory||{});
+}
+function showChallenge(d){screen("challengegame");const c=d.challenge||{index:0,p1:null,p2:null},i=+c.index||0;$("cRound").innerHTML="Desafio<br>"+Math.min(i+1,10)+"/10";$("cDone").innerHTML="Concluídos<br>"+i;if(i>=10||c.finished){$("challengeText").textContent="🎉 Vocês completaram todos!";$("doneChallenge").disabled=$("notChallenge").disabled=true;return}$("challengeText").textContent=challenges[i];$("doneChallenge").disabled=c[role]!==null;$("notChallenge").disabled=c[role]!==null;$( "challengeStatus").textContent=c[role]!==null?"Sua resposta foi registrada. Aguarde o outro.":"Façam juntos e marque sua resposta."}
+let challengeBusy=false;
+async function answerChallenge(value){
+ if(challengeBusy||!room||!role)return;
+ challengeBusy=true;
+ const ref=db.ref("rooms/"+room+"/challenge");
+ try{
+  const before=(await ref.once("value")).val()||{index:0,p1:null,p2:null};
+  if(before[role]!==null&&before[role]!==undefined)return;
+  await ref.child(role).set(value);
+  const after=(await ref.once("value")).val()||{};
+  if(after.p1!==null&&after.p1!==undefined&&after.p2!==null&&after.p2!==undefined&&Number(after.index||0)===Number(before.index||0)){
+   await ref.transaction(c=>{
+    if(!c)return c;
+    const i=Number(c.index||0);
+    if(i!==Number(before.index||0))return;
+    if(c.p1===null||c.p1===undefined||c.p2===null||c.p2===undefined)return;
+    if(i>=challenges.length)return {index:challenges.length,p1:null,p2:null,finished:true};
+    const next=i+1;
+    return next>=challenges.length?{index:challenges.length,p1:null,p2:null,finished:true}:{index:next,p1:null,p2:null};
+   });
+  }
+ }finally{challengeBusy=false}
+}
+$("doneChallenge").onclick=()=>answerChallenge(true);$("notChallenge").onclick=()=>answerChallenge(false);
+</script></body></html>
