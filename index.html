@@ -50,12 +50,12 @@
             background: #e67e22;
             color: #fff;
             border: 3px solid #f39c12;
-            padding: 8px 18px;
-            font-size: clamp(0.85rem, 1.8vw, 1rem);
+            padding: 10px 20px;
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
             font-weight: bold;
             border-radius: 6px;
             cursor: pointer;
-            margin: 6px 0;
+            margin: 8px 0;
             flex-shrink: 0;
         }
         .btn:hover { background: #d35400; transform: scale(1.04); }
@@ -197,12 +197,12 @@
     <!-- TELA 1: MENU INICIAL -->
     <div id="screen-menu" class="overlay">
         <h1>🦺 SUPER SEGURANÇA BROS</h1>
-        <p><strong>Desafio dos Riscos Ocupacionais</strong><br>Jogue em tela cheia e vire o celular na horizontal para uma experiência perfeita.</p>
+        <p><strong>Desafio dos Riscos Ocupacionais</strong><br>Toque em um dos botões abaixo para iniciar a partida:</p>
         <div>
-            <button class="btn btn-green" onclick="requestFullscreenAndStart(1)">👤 1 Jogador (Tela Cheia)</button>
-            <button class="btn btn-blue" onclick="requestFullscreenAndStart(2)">👥 2 Jogadores (Tela Cheia)</button>
+            <button class="btn btn-green" onclick="requestFullscreenAndStart(1)">👤 1 Jogador</button>
+            <button class="btn btn-blue" onclick="requestFullscreenAndStart(2)">👥 2 Jogadores</button>
         </div>
-        <p style="font-size:0.75rem; color:#bdc3c7; margin-top:6px;">Controles: P1 (Setas / Toque) | P2 (W, A, D + F para pular)</p>
+        <p style="font-size:0.75rem; color:#bdc3c7; margin-top:8px;">Dica: Gire o celular na horizontal para jogar em tela cheia.</p>
     </div>
 
     <!-- TELA 2: INTRODUÇÃO -->
@@ -276,14 +276,17 @@ resizeCanvas();
 
 function requestFullscreenAndStart(count) {
     const elem = document.documentElement;
-    if (elem.requestFullscreen) {
-        elem.requestFullscreen().catch(() => {});
-    } else if (elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen();
+    try {
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen().catch(() => {});
+        } else if (elem.webkitRequestFullscreen) {
+            elem.webkitRequestFullscreen();
+        }
+    } catch (e) {
+        console.log("Fullscreen error:", e);
     }
-    if (screen.orientation && screen.orientation.lock) {
-        screen.orientation.lock('landscape').catch(() => {});
-    }
+    
+    // Inicia a história imediatamente sem travar
     startStory(count);
 }
 
@@ -491,6 +494,4 @@ function setupLevel(phase) {
         });
     }
 
-    
-
-  
+    document.getElementById(
