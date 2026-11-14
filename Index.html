@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Super Segurança Bros - Em Jogo</title>
+    <title>Super Segurança Bros - Desafio dos Riscos Ocupacionais</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
         body {
@@ -32,7 +32,7 @@
         .overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 20, 25, 0.94);
+            background: rgba(15, 20, 25, 0.95);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -42,23 +42,24 @@
             z-index: 10;
         }
         .hidden { display: none !important; }
-        h1 { font-size: clamp(1.3rem, 3.8vw, 2.3rem); color: #f1c40f; text-shadow: 2px 2px #c0392b; margin-bottom: 10px; }
-        h2 { font-size: clamp(1.1rem, 2.8vw, 1.7rem); color: #2ecc71; margin-bottom: 10px; }
-        p { font-size: clamp(0.85rem, 2vw, 1.02rem); max-width: 680px; line-height: 1.5; margin-bottom: 14px; color: #ecf0f1; }
+        h1 { font-size: clamp(1.4rem, 4vw, 2.5rem); color: #f1c40f; text-shadow: 2px 2px #c0392b; margin-bottom: 10px; }
+        h2 { font-size: clamp(1.1rem, 3vw, 1.7rem); color: #2ecc71; margin-bottom: 10px; }
+        p { font-size: clamp(0.85rem, 2vw, 1.05rem); max-width: 680px; line-height: 1.5; margin-bottom: 15px; color: #ecf0f1; }
         .btn {
             background: #e67e22;
             color: #fff;
             border: 3px solid #f39c12;
             padding: 10px 22px;
-            font-size: clamp(0.9rem, 2vw, 1.05rem);
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
             font-weight: bold;
             border-radius: 6px;
             cursor: pointer;
             margin: 6px;
         }
+        .btn:hover { background: #d35400; transform: scale(1.04); }
         .btn-green { background: #27ae60; border-color: #2ecc71; }
+        .btn-blue { background: #2980b9; border-color: #3498db; }
         
-        /* HUD Superior */
         #hud {
             position: absolute;
             top: 0; left: 0; width: 100%;
@@ -82,14 +83,13 @@
             border: 1px solid #f39c12;
         }
 
-        /* Grid de EPIs */
         #epi-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 10px;
             width: 100%;
             max-width: 720px;
-            margin: 10px 0;
+            margin: 12px 0;
         }
         .epi-card {
             background: #2c3e50;
@@ -103,10 +103,9 @@
             background: #1e4d3b;
             box-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
         }
-        .epi-card h4 { color: #f1c40f; font-size: 0.92rem; margin-bottom: 4px; }
-        .epi-card span { font-size: 0.78rem; color: #bdc3c7; display: block; }
+        .epi-card h4 { color: #f1c40f; font-size: 0.95rem; margin-bottom: 4px; }
+        .epi-card span { font-size: 0.8rem; color: #bdc3c7; display: block; }
 
-        /* Nuvem de Diálogo */
         #dialog-cloud {
             position: absolute;
             top: 52px;
@@ -117,26 +116,25 @@
             background: #fff;
             color: #2c3e50;
             border-radius: 20px;
-            padding: 10px 16px;
+            padding: 12px 18px;
             border: 3px solid #3498db;
             box-shadow: 0 6px 15px rgba(0,0,0,0.5);
             z-index: 6;
-            font-size: clamp(0.78rem, 1.8vw, 0.92rem);
+            font-size: clamp(0.8rem, 1.8vw, 0.95rem);
             display: flex;
             align-items: center;
             gap: 12px;
         }
         .npc-avatar {
-            font-size: 1.8rem;
+            font-size: 2rem;
             background: #ecf0f1;
             border-radius: 50%;
-            width: 44px; height: 44px;
+            width: 48px; height: 48px;
             display: flex; align-items: center; justify-content: center;
             flex-shrink: 0;
             border: 2px solid #2980b9;
         }
 
-        /* Controles Mobile */
         #mobile-controls {
             display: none;
             width: 100%;
@@ -164,10 +162,10 @@
 
 <div id="game-wrapper">
     <!-- HUD -->
-    <div id="hud">
+    <div id="hud" class="hidden">
         <div class="hud-box">
             <div><strong>👷 Técnico (P1):</strong> <span id="p1-hearts" class="hearts">❤️❤️❤️</span></div>
-            <div id="p1-epi" class="epi-badge">Aguardando EPI</div>
+            <div id="p1-epi" class="epi-badge">Sem EPI</div>
         </div>
         <div class="hud-box" style="text-align: center;">
             <div id="phase-title" style="color:#f1c40f; font-weight:bold;">FASE 1: RISCO FÍSICO</div>
@@ -175,7 +173,7 @@
         </div>
         <div class="hud-box" id="p2-hud" style="text-align: right;">
             <div><strong>🔬 Cientista (P2):</strong> <span id="p2-hearts" class="hearts">❤️❤️❤️</span></div>
-            <div id="p2-epi" class="epi-badge">Aguardando EPI</div>
+            <div id="p2-epi" class="epi-badge">Sem EPI</div>
         </div>
     </div>
 
@@ -184,14 +182,37 @@
         <div class="npc-avatar" id="npc-icon">👨‍💼</div>
         <div>
             <strong id="npc-name" style="color:#2980b9;">Supervisor Carlos:</strong>
-            <div id="npc-text">Preparem-se!</div>
+            <div id="npc-text">Bem-vindos à Indústria NovaTech!</div>
         </div>
     </div>
 
     <canvas id="gameCanvas" width="900" height="506"></canvas>
 
-    <!-- TELA DE ESCOLHA DE EPIs -->
-    <div id="screen-epi" class="overlay">
+    <!-- TELA 1: MENU INICIAL -->
+    <div id="screen-menu" class="overlay">
+        <h1>🦺 SUPER SEGURANÇA BROS</h1>
+        <p><strong>Aventura dos Riscos Ocupacionais</strong><br>
+        Controle o <strong>Técnico de Segurança (Vermelho)</strong> e o <strong>Cientista (Verde)</strong> através de 5 fases industriais!</p>
+        <div>
+            <button class="btn btn-green" onclick="startStory(1)">👤 1 Jogador (Técnico)</button>
+            <button class="btn btn-blue" onclick="startStory(2)">👥 2 Jogadores (Técnico + Cientista)</button>
+        </div>
+        <p style="font-size:0.8rem; color:#bdc3c7; margin-top:10px;">Controles PC: P1 (Setas + Espaço) | P2 (W, A, D + F para pular)</p>
+    </div>
+
+    <!-- TELA 2: INTRODUÇÃO / QUEDA DE ENERGIA -->
+    <div id="screen-intro" class="overlay hidden">
+        <h2>⚡ QUEDA DE ENERGIA NA FÁBRICA!</h2>
+        <p>
+            O Técnico de Segurança e o Cientista entram na planta industrial para uma auditoria.<br><br>
+            <strong>BZZZT!</strong> Ocorre uma queda brusca de energia e <strong>todos os portões se trancam!</strong><br><br>
+            O Supervisor Carlos aparece no rádio: <em>"Vou guiar vocês pelos 5 setores até a saída. Escolham os EPIs corretos em cada fase e cuidado com os frascos suspeitos!"</em>
+        </p>
+        <button class="btn" onclick="openEpiSelection(1)">Avançar para a Fase 1 ➡️</button>
+    </div>
+
+    <!-- TELA 3: ESCOLHA DE EPIs -->
+    <div id="screen-epi" class="overlay hidden">
         <h2 id="epi-modal-title">🛡️ FASE 1: ESCOLHA OS EPIs (NÍVEL BRONZE)</h2>
         <div id="epi-cloud-hint" style="background:#fff; color:#222; padding:10px 15px; border-radius:14px; max-width:650px; margin-bottom:10px; border:3px solid #3498db; font-size:0.9rem;"></div>
         <p style="font-size:0.85rem; margin-bottom:5px;">Selecione <strong>exatamente 2 EPIs</strong> adequados para este risco:</p>
@@ -199,33 +220,29 @@
         <button class="btn btn-green" onclick="confirmEpis()">Equipar e Entrar no Setor ✅</button>
     </div>
 
-    <!-- TELA APERFEIÇOAMENTO OURO -->
+    <!-- TELA 4: APERFEIÇOAMENTO OURO -->
     <div id="screen-upgrade" class="overlay hidden">
         <h2 style="color:#f1c40f;">⭐ APERFEIÇOAMENTO DE EPI: NÍVEL OURO!</h2>
-        <p>Vocês chegaram na metade do setor! A bancada de segurança aperfeiçoou seus EPIs de <strong>Bronze</strong> para <strong>OURO</strong>, garantindo resistência máxima até o fim da fase!</p>
+        <p>Vocês chegaram na metade do setor! A bancada de segurança liberou o aperfeiçoamento dos seus EPIs de <strong>Bronze</strong> para <strong>OURO</strong>!</p>
         <button class="btn" onclick="resumeAfterUpgrade()">Continuar com EPI Ouro 🏆</button>
     </div>
 
-    <!-- TELA REVELAÇÃO DO CHEFE FINAL -->
+    <!-- TELA 5: REVELAÇÃO DO CHEFE FINAL -->
     <div id="screen-boss-intro" class="overlay hidden">
         <h1 style="color:#e74c3c;">🎭 A GRANDE REVELAÇÃO!</h1>
         <p>
-            Vocês chegaram ao Laboratório Biológico Central (Fase 5)!<br>
-            O <strong>Supervisor Carlos</strong> revela sua verdadeira face:<br><br>
-            <em>"Fui eu quem cortou a energia e trancou os portões! Eu desviei as verbas de segurança e liberei o monstro <strong>SR. RISCO BIOLÓGICO</strong> para acabar com vocês!"</em><br><br>
+            Laboratório Biológico Central (Fase 5)! O <strong>Supervisor Carlos</strong> tira seu crachá sorrindo:<br><br>
+            <em>"Fui eu quem cortou a energia e trancou os portões! Criei o monstro <strong>SR. RISCO BIOLÓGICO</strong> para eliminar qualquer inspetor!"</em><br><br>
             Derrote o <strong>Sr. Risco</strong> pulando sobre a cabeça dele!
         </p>
         <button class="btn" onclick="startFinalBossBattle()">⚔️ Enfrentar o Sr. Risco!</button>
     </div>
 
-    <!-- TELA FINAL (VITÓRIA OU DERROTA) -->
+    <!-- TELA 6: FIM DE JOGO -->
     <div id="screen-end" class="overlay hidden">
         <h1 id="end-title">FIM DE JOGO</h1>
         <p id="end-desc"></p>
-        <div>
-            <button class="btn btn-green" onclick="location.reload()">🔄 Jogar Novamente</button>
-            <button class="btn" onclick="window.location.href='index.html'">🏠 Voltar ao Início</button>
-        </div>
+        <button class="btn btn-green" onclick="location.reload()">🔄 Jogar Novamente</button>
     </div>
 </div>
 
@@ -245,15 +262,12 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-const urlParams = new URLSearchParams(window.location.search);
-let numPlayers = parseInt(urlParams.get('players')) || 1;
-if (numPlayers < 1 || numPlayers > 2) numPlayers = 1;
-
+let numPlayers = 1;
 let currentPhase = 1;
 let epiTier = 'BRONZE';
 let selectedEpis = [];
 let hasCorrectEpi = false;
-let gameState = 'PAUSED';
+let gameState = 'MENU';
 let cameraX = 0;
 let levelWidth = 2300;
 let floatingTexts = [];
@@ -263,28 +277,28 @@ const PHASES = {
         name: "FASE 1: RISCO FÍSICO (Ruído e Calor)",
         color: "#2ecc71",
         bgTop: "#143d29", bgBottom: "#0b2418",
-        npcName: "Supervisor Carlos (Seu Guia)",
+        npcName: "Supervisor Carlos (Guia)",
         npcIcon: "👨‍💼",
-        hint: "☁️ Supervisor Carlos: 'Caldeiras e turbinas no máximo: ruído extremo e calor intenso! Escolham os 2 EPIs para RISCO FÍSICO.'",
-        inGameTip: "Desvie ou neutralize o calor! Atenção aos frascos: um cura +1 ❤️, o outro é pegadinha (-1 ❤️)!",
+        hint: "☁️ Supervisor Carlos: 'Caldeiras e turbinas no máximo: ruído e calor extremo! Escolham os 2 EPIs para RISCO FÍSICO.'",
+        inGameTip: "Atenção aos frascos: um cura +1 ❤️, o outro é pegadinha (-1 ❤️)!",
         epis: [
             { id: "abafador", name: "Abafador Auricular", desc: "Proteção contra ruído intenso", correct: true },
             { id: "termica", name: "Roupa Térmica Aluminizada", desc: "Isolamento contra calor extremo", correct: true },
-            { id: "mascara_gas", name: "Máscara para Gases", desc: "Filtro contra vapores químicos", correct: false },
-            { id: "luva_latex", name: "Luva Cirúrgica", desc: "Barreira contra bactérias", correct: false }
+            { id: "mascara_gas", name: "Máscara para Gases", desc: "Filtro químico", correct: false },
+            { id: "luva_latex", name: "Luva Cirúrgica", desc: "Barreira bacteriológica", correct: false }
         ]
     },
     2: {
         name: "FASE 2: RISCO QUÍMICO (Gases e Ácidos)",
         color: "#e74c3c",
         bgTop: "#4a1515", bgBottom: "#290a0a",
-        npcName: "Supervisor Carlos (Seu Guia)",
+        npcName: "Supervisor Carlos (Guia)",
         npcIcon: "👨‍💼",
-        hint: "☁️ Supervisor Carlos: 'Vazamento químico! Os EPIs da Fase 1 ficaram para trás. Escolham os 2 EPIs para RISCO QUÍMICO!'",
-        inGameTip: "Cuidado com as nuvens tóxicas e frascos enganosos!",
+        hint: "☁️ Supervisor Carlos: 'Vazamento químico! Escolham os 2 EPIs para RISCO QUÍMICO!'",
+        inGameTip: "Cuidado com nuvens tóxicas e frascos enganosos!",
         epis: [
-            { id: "respirador", name: "Respirador Filtro Químico", desc: "Filtra gases e vapores tóxicos", correct: true },
-            { id: "oculos_ved", name: "Óculos Ampla Visão Vedado", desc: "Protege contra respingos ácidos", correct: true },
+            { id: "respirador", name: "Respirador Filtro Químico", desc: "Filtra vapores tóxicos", correct: true },
+            { id: "oculos_ved", name: "Óculos Ampla Visão Vedado", desc: "Protege contra ácidos", correct: true },
             { id: "cinto_altura", name: "Cinto Paraquedista", desc: "Proteção contra quedas", correct: false },
             { id: "cinta_ergo", name: "Apoio Lombar", desc: "Ajuste postural", correct: false }
         ]
@@ -308,15 +322,15 @@ const PHASES = {
         name: "FASE 4: RISCO DE ACIDENTES (Eletricidade e Máquinas)",
         color: "#3498db",
         bgTop: "#13324a", bgBottom: "#091926",
-        npcName: "Supervisor Carlos (Seu Guia)",
+        npcName: "Supervisor Carlos (Guia)",
         npcIcon: "👨‍💼",
-        hint: "☁️ Supervisor Carlos: 'Fios desencapados e engrenagens expostas! Escolham os 2 EPIs para RISCO DE ACIDENTES!'",
+        hint: "☁️ Supervisor Carlos: 'Fios desencapados e engrenagens! Escolham os 2 EPIs para RISCO DE ACIDENTES!'",
         inGameTip: "Cuidado com choques elétricos e peças mecânicas!",
         epis: [
             { id: "capacete", name: "Capacete Classe B", desc: "Impacto e isolamento elétrico", correct: true },
-            { id: "luva_isolante", name: "Luva Isolante de Borracha", desc: "Proteção contra choque elétrico", correct: true },
+            { id: "luva_isolante", name: "Luva Isolante de Borracha", desc: "Proteção contra choque", correct: true },
             { id: "protetor_solar", name: "Creme Protetor UV", desc: "Proteção solar", correct: false },
-            { id: "protetor_plug", name: "Protetor Auricular Plug", desc: "Apenas ruído leve", correct: false }
+            { id: "protetor_plug", name: "Protetor Auricular Plug", desc: "Ruído leve", correct: false }
         ]
     },
     5: {
@@ -325,10 +339,10 @@ const PHASES = {
         bgTop: "#2c113d", bgBottom: "#15071f",
         npcName: "Sistema de Alerta",
         npcIcon: "☣️",
-        hint: "☁️ Alerta Máximo: 'Contaminação biológica e o monstro SR. RISCO à frente! Escolham os 2 EPIs de BIOSSEGURANÇA!'",
+        hint: "☁️ Alerta Máximo: 'Contaminação biológica e monstro SR. RISCO! Escolham os 2 EPIs de BIOSSEGURANÇA!'",
         inGameTip: "Enfrente o Sr. Risco no final do laboratório!",
         epis: [
-            { id: "macacao_tyvek", name: "Macacão Impermeável Tyvek", desc: "Barreira contra vírus e bactérias", correct: true },
+            { id: "macacao_tyvek", name: "Macacão Impermeável Tyvek", desc: "Barreira contra vírus/bactérias", correct: true },
             { id: "mascara_pff3", name: "Respirador PFF3 + Face Shield", desc: "Filtragem biológica máxima", correct: true },
             { id: "capacete_obra", name: "Capacete Simples", desc: "Sem proteção biológica", correct: false },
             { id: "cinta_peso", name: "Cinta Lombar", desc: "Sem proteção biológica", correct: false }
@@ -350,6 +364,7 @@ window.addEventListener('keyup', e => { keys[e.code] = false; });
 
 function bindTouch(id, code) {
     const el = document.getElementById(id);
+    if (!el) return;
     el.addEventListener('touchstart', e => { e.preventDefault(); keys[code] = true; });
     el.addEventListener('touchend', e => { e.preventDefault(); keys[code] = false; });
 }
@@ -359,6 +374,12 @@ bindTouch('btn-jump', 'Space');
 
 function hideAllScreens() {
     document.querySelectorAll('.overlay').forEach(el => el.classList.add('hidden'));
+}
+
+function startStory(count) {
+    numPlayers = count;
+    hideAllScreens();
+    document.getElementById('screen-intro').classList.remove('hidden');
 }
 
 function openEpiSelection(phase) {
@@ -412,6 +433,7 @@ function confirmEpis() {
 
 function setupLevel(phase) {
     const pData = PHASES[phase];
+    document.getElementById('hud').classList.remove('hidden');
     document.getElementById('dialog-cloud').classList.remove('hidden');
     document.getElementById('npc-icon').textContent = pData.npcIcon;
     document.getElementById('npc-name').textContent = pData.npcName + ":";
@@ -599,8 +621,10 @@ function update() {
 
     if (players.every(p => p.hearts <= 0)) {
         gameState = 'END';
+        document.getElementById('hud').classList.add('hidden');
+        document.getElementById('dialog-cloud').classList.add('hidden');
         document.getElementById('end-title').textContent = "💀 ACIDENTE DE TRABALHO! FIM DE JOGO";
-        document.getElementById('end-desc').textContent = "Todos os jogadores perderam seus corações. Escolha os EPIs certos na próxima tentativa!";
+        document.getElementById('end-desc').textContent = "Todos os jogadores perderam seus corações. Escolha os EPIs certos!";
         document.getElementById('screen-end').classList.remove('hidden');
         return;
     }
@@ -635,8 +659,10 @@ function update() {
                         addFloatingText(boss.x + 20, boss.y - 20, `GOLPE BIOSSEGURANÇA! (${boss.hp} HP)`, "#f1c40f");
                         if (boss.hp <= 0) {
                             gameState = 'END';
+                            document.getElementById('hud').classList.add('hidden');
+                            document.getElementById('dialog-cloud').classList.add('hidden');
                             document.getElementById('end-title').textContent = "🏆 VITÓRIA! FÁBRICA SEGURA!";
-                            document.getElementById('end-desc').innerHTML = "Vocês derrotaram o <strong>Sr. Risco</strong>, desmascararam o traidor <strong>Supervisor Carlos</strong> e venceram todos os 5 Riscos Ocupacionais!";
+                            document.getElementById('end-desc').innerHTML = "Vocês derrotaram o <strong>Sr. Risco</strong>, desmascararam o <strong>Supervisor Carlos</strong> e venceram todos os 5 Riscos Ocupacionais!";
                             document.getElementById('screen-end').classList.remove('hidden');
                         }
                     }
@@ -792,8 +818,8 @@ function gameLoop() {
     requestAnimationFrame(gameLoop);
 }
 
-openEpiSelection(1);
 gameLoop();
 </script>
 </body>
 </html>
+  
