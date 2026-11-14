@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Super Segurança Bros - Em Jogo</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+        body {
+            background-color: #111;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        #game-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            aspect-ratio: 16 / 9;
+            background: #1e272e;
+            border: 4px solid #f1c40f;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(241, 196, 15, 0.3);
+        }
+        canvas { display: block; width: 100%; height: 100%; }
+        .overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 20, 25, 0.94);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            z-index: 10;
+        }
+        .hidden { display: none !important; }
+        h1 { font-size: clamp(1.3rem, 3.8vw, 2.3rem); color: #f1c40f; text-shadow: 2px 2px #c0392b; margin-bottom: 10px; }
+        h2 { font-size: clamp(1.1rem, 2.8vw, 1.7rem); color: #2ecc71; margin-bottom: 10px; }
+        p { font-size: clamp(0.85rem, 2vw, 1.02rem); max-width: 680px; line-height: 1.5; margin-bottom: 14px; color: #ecf0f1; }
+        .btn {
+            background: #e67e22;
+            color: #fff;
+            border: 3px solid #f39c12;
+            padding: 10px 22px;
+            font-size: clamp(0.9rem, 2vw, 1.05rem);
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 6px;
+        }
+        .btn-green { background: #27ae60; border-color: #2ecc71; }
+        
+        /* HUD Superior */
+        #hud {
+            position: absolute;
+            top: 0; left: 0; width: 100%;
+            padding: 8px 14px;
+            background: rgba(0, 0, 0, 0.75);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: clamp(0.75rem, 1.8vw, 0.95rem);
+            z-index: 5;
+            border-bottom: 2px solid #34495e;
+        }
+        .hud-box { display: flex; flex-direction: column; gap: 3px; }
+        .hearts { color: #e74c3c; font-size: 1.1em; letter-spacing: 2px; }
+        .epi-badge {
+            background: #34495e;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            color: #f1c40f;
+            border: 1px solid #f39c12;
+        }
+
+        /* Grid de EPIs */
+        #epi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+            gap: 10px;
+            width: 100%;
+            max-width: 720px;
+            margin: 10px 0;
+        }
+        .epi-card {
+            background: #2c3e50;
+            border: 2px solid #7f8c8d;
+            border-radius: 8px;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .epi-card.selected {
+            border-color: #2ecc71;
+            background: #1e4d3b;
+            box-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+        }
+        .epi-card h4 { color: #f1c40f; font-size: 0.92rem; margin-bottom: 4px; }
+        .epi-card span { font-size: 0.78rem; color: #bdc3c7; display: block; }
+
+        /* Nuvem de Diálogo */
+        #dialog-cloud {
+            position: absolute;
+            top: 52px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 88%;
+            max-width: 650px;
+            background: #fff;
+            color: #2c3e50;
+            border-radius: 20px;
+            padding: 10px 16px;
+            border: 3px solid #3498db;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+            z-index: 6;
+            font-size: clamp(0.78rem, 1.8vw, 0.92rem);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .npc-avatar {
+            font-size: 1.8rem;
+            background: #ecf0f1;
+            border-radius: 50%;
+            width: 44px; height: 44px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            border: 2px solid #2980b9;
+        }
+
+        /* Controles Mobile */
+        #mobile-controls {
+            display: none;
+            width: 100%;
+            max-width: 900px;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background: #1a1a1a;
+        }
+        @media (pointer: coarse), (max-width: 768px) {
+            #mobile-controls { display: flex; }
+        }
+        .touch-group { display: flex; gap: 10px; }
+        .t-btn {
+            width: 54px; height: 54px;
+            background: rgba(255,255,255,0.15);
+            border: 2px solid #f1c40f;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.3rem;
+            display: flex; align-items: center; justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-wrapper">
+    <!-- HUD -->
+    <div id="hud">
+        <div class="hud-box">
+            <div><strong>👷 Técnico (P1):</strong> <span id="p1-hearts" class="hearts">❤️❤️❤️</span></div>
+            <div id="p1-epi" class="epi-badge">Aguardando EPI</div>
+        </div>
+        <div class="hud-box" style="text-align: center;">
+            <div id="phase-title" style="color:#f1c40f; font-weight:bold;">FASE 1: RISCO FÍSICO</div>
+            <div id="tier-badge" style="color:#cd7f32; font-size:0.85em;">Nível EPI: BRONZE</div>
+        </div>
+        <div class="hud-box" id="p2-hud" style="text-align: right;">
+            <div><strong>🔬 Cientista (P2):</strong> <span id="p2-hearts" class="hearts">❤️❤️❤️</span></div>
+            <div id="p2-epi" class="epi-badge">Aguardando EPI</div>
+        </div>
+    </div>
+
+    <!-- Nuvem de Fala -->
+    <div id="dialog-cloud" class="hidden">
+        <div class="npc-avatar" id="npc-icon">👨‍💼</div>
+        <div>
+            <strong id="npc-name" style="color:#2980b9;">Supervisor Carlos:</strong>
+            <div id="npc-text">Preparem-se!</div>
+        </div>
+    </div>
+
+    <canvas id="gameCanvas" width="900" height="506"></canvas>
+
+    <!-- TELA DE ESCOLHA DE EPIs -->
+    <div id="screen-epi" class="overlay">
+        <h2 id="epi-modal-title">🛡️ FASE 1: ESCOLHA OS EPIs (NÍVEL BRONZE)</h2>
+        <div id="epi-cloud-hint" style="background:#fff; color:#222; padding:10px 15px; border-radius:14px; max-width:650px; margin-bottom:10px; border:3px solid #3498db; font-size:0.9rem;"></div>
+        <p style="font-size:0.85rem; margin-bottom:5px;">Selecione <strong>exatamente 2 EPIs</strong> adequados para este risco:</p>
+        <div id="epi-grid"></div>
+        <button class="btn btn-green" onclick="confirmEpis()">Equipar e Entrar no Setor ✅</button>
+    </div>
+
+    <!-- TELA APERFEIÇOAMENTO OURO -->
+    <div id="screen-upgrade" class="overlay hidden">
+        <h2 style="color:#f1c40f;">⭐ APERFEIÇOAMENTO DE EPI: NÍVEL OURO!</h2>
+        <p>Vocês chegaram na metade do setor! A bancada de segurança aperfeiçoou seus EPIs de <strong>Bronze</strong> para <strong>OURO</strong>, garantindo resistência máxima até o fim da fase!</p>
+        <button class="btn" onclick="resumeAfterUpgrade()">Continuar com EPI Ouro 🏆</button>
+    </div>
+
+    <!-- TELA REVELAÇÃO DO CHEFE FINAL -->
+    <div id="screen-boss-intro" class="overlay hidden">
+        <h1 style="color:#e74c3c;">🎭 A GRANDE REVELAÇÃO!</h1>
+        <p>
+            Vocês chegaram ao Laboratório Biológico Central (Fase 5)!<br>
+            O <strong>Supervisor Carlos</strong> revela sua verdadeira face:<br><br>
+            <em>"Fui eu quem cortou a energia e trancou os portões! Eu desviei as verbas de segurança e liberei o monstro <strong>SR. RISCO BIOLÓGICO</strong> para acabar com vocês!"</em><br><br>
+            Derrote o <strong>Sr. Risco</strong> pulando sobre a cabeça dele!
+        </p>
+        <button class="btn" onclick="startFinalBossBattle()">⚔️ Enfrentar o Sr. Risco!</button>
+    </div>
+
+    <!-- TELA FINAL (VITÓRIA OU DERROTA) -->
+    <div id="screen-end" class="overlay hidden">
+        <h1 id="end-title">FIM DE JOGO</h1>
+        <p id="end-desc"></p>
+        <div>
+            <button class="btn btn-green" onclick="location.reload()">🔄 Jogar Novamente</button>
+            <button class="btn" onclick="window.location.href='index.html'">🏠 Voltar ao Início</button>
+        </div>
+    </div>
+</div>
+
+<!-- Controles Mobile -->
+<div id="mobile-controls">
+    <div class="touch-group">
+        <div class="t-btn" id="btn-left">⬅️</div>
+        <div class="t-btn" id="btn-right">➡️</div>
+    </div>
+    <div style="color:#f1c40f; font-size:0.8rem; align-self:center; text-align:center;">Controles P1</div>
+    <div class="touch-group">
+        <div class="t-btn" id="btn-jump">⬆️</div>
+    </div>
+</div>
+
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+const urlParams = new URLSearchParams(window.location.search);
+let numPlayers = parseInt(urlParams.get('players')) || 1;
+if (numPlayers < 1 || numPlayers > 2) numPlayers = 1;
+
+let currentPhase = 1;
+let epiTier = 'BRONZE';
+let selectedEpis = [];
+let hasCorrectEpi = false;
+let gameState = 'PAUSED';
+let cameraX = 0;
+let levelWidth = 2300;
+let floatingTexts = [];
+
+const PHASES = {
+    1: {
+        name: "FASE 1: RISCO FÍSICO (Ruído e Calor)",
+        color: "#2ecc71",
+        bgTop: "#143d29", bgBottom: "#0b2418",
+        npcName: "Supervisor Carlos (Seu Guia)",
+        npcIcon: "👨‍💼",
+        hint: "☁️ Supervisor Carlos: 'Caldeiras e turbinas no máximo: ruído extremo e calor intenso! Escolham os 2 EPIs para RISCO FÍSICO.'",
+        inGameTip: "Desvie ou neutralize o calor! Atenção aos frascos: um cura +1 ❤️, o outro é pegadinha (-1 ❤️)!",
+        epis: [
+            { id: "abafador", name: "Abafador Auricular", desc: "Proteção contra ruído intenso", correct: true },
+            { id: "termica", name: "Roupa Térmica Aluminizada", desc: "Isolamento contra calor extremo", correct: true },
+            { id: "mascara_gas", name: "Máscara para Gases", desc: "Filtro contra vapores químicos", correct: false },
+            { id: "luva_latex", name: "Luva Cirúrgica", desc: "Barreira contra bactérias", correct: false }
+        ]
+    },
+    2: {
+        name: "FASE 2: RISCO QUÍMICO (Gases e Ácidos)",
+        color: "#e74c3c",
+        bgTop: "#4a1515", bgBottom: "#290a0a",
+        npcName: "Supervisor Carlos (Seu Guia)",
+        npcIcon: "👨‍💼",
+        hint: "☁️ Supervisor Carlos: 'Vazamento químico! Os EPIs da Fase 1 ficaram para trás. Escolham os 2 EPIs para RISCO QUÍMICO!'",
+        inGameTip: "Cuidado com as nuvens tóxicas e frascos enganosos!",
+        epis: [
+            { id: "respirador", name: "Respirador Filtro Químico", desc: "Filtra gases e vapores tóxicos", correct: true },
+            { id: "oculos_ved", name: "Óculos Ampla Visão Vedado", desc: "Protege contra respingos ácidos", correct: true },
+            { id: "cinto_altura", name: "Cinto Paraquedista", desc: "Proteção contra quedas", correct: false },
+            { id: "cinta_ergo", name: "Apoio Lombar", desc: "Ajuste postural", correct: false }
+        ]
+    },
+    3: {
+        name: "FASE 3: RISCO ERGONÔMICO (Postura e Carga)",
+        color: "#f1c40f",
+        bgTop: "#4a3f11", bgBottom: "#262007",
+        npcName: "Operária Ana (Funcionária)",
+        npcIcon: "👩‍🔧",
+        hint: "☁️ Operária Ana: 'Esteiras descontroladas com caixas pesadas! Escolham os 2 equipamentos para RISCO ERGONÔMICO!'",
+        inGameTip: "Supere as cargas pesadas usando proteção ergonômica!",
+        epis: [
+            { id: "cinta_lombar", name: "Cinta Ergonômica Lombar", desc: "Estabiliza a coluna", correct: true },
+            { id: "botina_amort", name: "Botina com Amortecimento", desc: "Reduz impacto postural", correct: true },
+            { id: "viseira_solda", name: "Máscara de Solda", desc: "Proteção contra radiação", correct: false },
+            { id: "macacao_bio", name: "Macacão Biológico", desc: "Isolamento viral", correct: false }
+        ]
+    },
+    4: {
+        name: "FASE 4: RISCO DE ACIDENTES (Eletricidade e Máquinas)",
+        color: "#3498db",
+        bgTop: "#13324a", bgBottom: "#091926",
+        npcName: "Supervisor Carlos (Seu Guia)",
+        npcIcon: "👨‍💼",
+        hint: "☁️ Supervisor Carlos: 'Fios desencapados e engrenagens expostas! Escolham os 2 EPIs para RISCO DE ACIDENTES!'",
+        inGameTip: "Cuidado com choques elétricos e peças mecânicas!",
+        epis: [
+            { id: "capacete", name: "Capacete Classe B", desc: "Impacto e isolamento elétrico", correct: true },
+            { id: "luva_isolante", name: "Luva Isolante de Borracha", desc: "Proteção contra choque elétrico", correct: true },
+            { id: "protetor_solar", name: "Creme Protetor UV", desc: "Proteção solar", correct: false },
+            { id: "protetor_plug", name: "Protetor Auricular Plug", desc: "Apenas ruído leve", correct: false }
+        ]
+    },
+    5: {
+        name: "FASE FINAL 5: RISCO BIOLÓGICO (Sr. Risco)",
+        color: "#8e44ad",
+        bgTop: "#2c113d", bgBottom: "#15071f",
+        npcName: "Sistema de Alerta",
+        npcIcon: "☣️",
+        hint: "☁️ Alerta Máximo: 'Contaminação biológica e o monstro SR. RISCO à frente! Escolham os 2 EPIs de BIOSSEGURANÇA!'",
+        inGameTip: "Enfrente o Sr. Risco no final do laboratório!",
+        epis: [
+            { id: "macacao_tyvek", name: "Macacão Impermeável Tyvek", desc: "Barreira contra vírus e bactérias", correct: true },
+            { id: "mascara_pff3", name: "Respirador PFF3 + Face Shield", desc: "Filtragem biológica máxima", correct: true },
+            { id: "capacete_obra", name: "Capacete Simples", desc: "Sem proteção biológica", correct: false },
+            { id: "cinta_peso", name: "Cinta Lombar", desc: "Sem proteção biológica", correct: false }
+        ]
+    }
+};
+
+let players = [];
+let obstacles = [];
+let platforms = [];
+let antidotes = [];
+let boss = null;
+let upgradeCheckpointX = 1150;
+let upgradeTriggered = false;
+
+const keys = {};
+window.addEventListener('keydown', e => { keys[e.code] = true; });
+window.addEventListener('keyup', e => { keys[e.code] = false; });
+
+function bindTouch(id, code) {
+    const el = document.getElementById(id);
+    el.addEventListener('touchstart', e => { e.preventDefault(); keys[code] = true; });
+    el.addEventListener('touchend', e => { e.preventDefault(); keys[code] = false; });
+}
+bindTouch('btn-left', 'ArrowLeft');
+bindTouch('btn-right', 'ArrowRight');
+bindTouch('btn-jump', 'Space');
+
+function hideAllScreens() {
+    document.querySelectorAll('.overlay').forEach(el => el.classList.add('hidden'));
+}
+
+function openEpiSelection(phase) {
+    currentPhase = phase;
+    epiTier = 'BRONZE';
+    upgradeTriggered = false;
+    selectedEpis = [];
+
+    hideAllScreens();
+    const pData = PHASES[phase];
+    document.getElementById('epi-modal-title').textContent = `🛡️ ${pData.name} - EPIs NÍVEL BRONZE`;
+    document.getElementById('epi-cloud-hint').innerHTML = pData.hint;
+
+    const grid = document.getElementById('epi-grid');
+    grid.innerHTML = '';
+
+    const shuffled = [...pData.epis].sort(() => Math.random() - 0.5);
+    shuffled.forEach(epi => {
+        const card = document.createElement('div');
+        card.className = 'epi-card';
+        card.innerHTML = `<h4>${epi.name}</h4><span>${epi.desc}</span>`;
+        card.onclick = () => {
+            if (selectedEpis.includes(epi.id)) {
+                selectedEpis = selectedEpis.filter(i => i !== epi.id);
+                card.classList.remove('selected');
+            } else if (selectedEpis.length < 2) {
+                selectedEpis.push(epi.id);
+                card.classList.add('selected');
+            }
+        };
+        grid.appendChild(card);
+    });
+
+    document.getElementById('screen-epi').classList.remove('hidden');
+}
+
+function confirmEpis() {
+    if (selectedEpis.length < 2) {
+        alert("Selecione 2 EPIs antes de entrar no setor!");
+        return;
+    }
+
+    const pData = PHASES[currentPhase];
+    const correctIds = pData.epis.filter(e => e.correct).map(e => e.id);
+    const matches = selectedEpis.filter(id => correctIds.includes(id)).length;
+    hasCorrectEpi = (matches === 2);
+
+    hideAllScreens();
+    setupLevel(currentPhase);
+}
+
+function setupLevel(phase) {
+    const pData = PHASES[phase];
+    document.getElementById('dialog-cloud').classList.remove('hidden');
+    document.getElementById('npc-icon').textContent = pData.npcIcon;
+    document.getElementById('npc-name').textContent = pData.npcName + ":";
+    
+    if (hasCorrectEpi) {
+        document.getElementById('npc-text').textContent = `EPIs corretos equipados! ${pData.inGameTip}`;
+    } else {
+        document.getElementById('npc-text').textContent = `⚠️ EPIs ERRADOS! Os obstáculos vão ferir vocês! ${pData.inGameTip}`;
+    }
+
+    document.getElementById('phase-title').textContent = pData.name;
+    document.getElementById('phase-title').style.color = pData.color;
+    updateTierHUD();
+
+    if (phase === 1) {
+        players = [
+            { id: 1, name: "Técnico", x: 80, y: 300, w: 34, h: 48, vx: 0, vy: 0, hearts: 3, color: "#e74c3c", hat: "#f1c40f", grounded: false, invuln: 0 }
+        ];
+        if (numPlayers === 2) {
+            players.push({ id: 2, name: "Cientista", x: 40, y: 300, w: 34, h: 48, vx: 0, vy: 0, hearts: 3, color: "#2ecc71", hat: "#ffffff", grounded: false, invuln: 0 });
+        }
+    } else {
+        players.forEach((p, idx) => {
+            p.x = 80 - idx * 40;
+            p.y = 300;
+            p.vx = 0; p.vy = 0;
+            p.invuln = 60;
+        });
+    }
+
+    document.getElementById('p2-hud').style.display = (numPlayers === 2) ? 'flex' : 'none';
+    updateHeartsHUD();
+
+    levelWidth = (phase === 5) ? 2000 : 2300;
+    cameraX = 0;
+    platforms = [
+        { x: 0, y: 440, w: levelWidth, h: 70 },
+        { x: 320, y: 340, w: 140, h: 20 },
+        { x: 560, y: 270, w: 150, h: 20 },
+        { x: 850, y: 330, w: 160, h: 20 },
+        { x: 1250, y: 320, w: 150, h: 20 },
+        { x: 1520, y: 250, w: 160, h: 20 },
+        { x: 1800, y: 340, w: 150, h: 20 }
+    ];
+
+    obstacles = [
+        { x: 420, y: 400, w: 40, h: 40, startX: 420, range: 110, speed: 1.5 + phase * 0.2, dir: 1 },
+        { x: 750, y: 400, w: 45, h: 40, startX: 750, range: 130, speed: 1.8 + phase * 0.2, dir: -1 },
+        { x: 1350, y: 400, w: 45, h: 40, startX: 1350, range: 140, speed: 2.0 + phase * 0.2, dir: 1 },
+        { x: 1680, y: 400, w: 50, h: 40, startX: 1680, range: 120, speed: 2.2 + phase * 0.2, dir: -1 }
+    ];
+
+    antidotes = [
+        { x: 610, y: 225, w: 26, h: 32, type: 'REAL', collected: false },
+        { x: 910, y: 285, w: 26, h: 32, type: 'TRAP', collected: false },
+        { x: 1580, y: 205, w: 26, h: 32, type: 'REAL', collected: false }
+    ];
+
+    boss = null;
+    if (phase === 5) {
+        boss = { x: 1650, y: 310, w: 90, h: 130, hp: 5, vx: -2.2, hurtTimer: 0, revealed: false };
+    }
+
+    gameState = 'PLAYING';
+}
+
+function updateHeartsHUD() {
+    players.forEach(p => {
+        const el = document.getElementById(`p${p.id}-hearts`);
+        if (el) el.textContent = p.hearts > 0 ? "❤️".repeat(p.hearts) : "💀";
+    });
+}
+
+function updateTierHUD() {
+    const tierEl = document.getElementById('tier-badge');
+    const epiLabel = hasCorrectEpi ? `EPI ${epiTier} ✅` : `EPI ERRADO ❌`;
+    tierEl.textContent = `Nível EPI: ${epiTier}`;
+    tierEl.style.color = (epiTier === 'OURO') ? '#f1c40f' : '#e67e22';
+    document.getElementById('p1-epi').textContent = epiLabel;
+    document.getElementById('p2-epi').textContent = epiLabel;
+}
+
+function addFloatingText(x, y, text, color) {
+    floatingTexts.push({ x, y, text, color, life: 75 });
+}
+
+function resumeAfterUpgrade() {
+    hideAllScreens();
+    epiTier = 'OURO';
+    updateTierHUD();
+    document.getElementById('npc-text').textContent = "✨ EPIs aperfeiçoados para NÍVEL OURO! Proteção máxima ativada!";
+    gameState = 'PLAYING';
+}
+
+function startFinalBossBattle() {
+    hideAllScreens();
+    document.getElementById('npc-icon').textContent = "👹";
+    document.getElementById('npc-name').textContent = "Vilão Carlos & Sr. Risco:";
+    document.getElementById('npc-text').textContent = "HAHAHA! Vocês nunca sairão deste laboratório!";
+    gameState = 'PLAYING';
+}
+
+function update() {
+    if (gameState !== 'PLAYING') return;
+
+    players.forEach(p => {
+        if (p.hearts <= 0) return;
+        if (p.invuln > 0) p.invuln--;
+
+        let left = (p.id === 1) ? keys['ArrowLeft'] : keys['KeyA'];
+        let right = (p.id === 1) ? keys['ArrowRight'] : keys['KeyD'];
+        let jump = (p.id === 1) ? (keys['Space'] || keys['ArrowUp']) : (keys['KeyW'] || keys['KeyF']);
+
+        if (left) p.vx = -4.5;
+        else if (right) p.vx = 4.5;
+        else p.vx *= 0.75;
+
+        if (jump && p.grounded) {
+            p.vy = -12.2;
+            p.grounded = false;
+        }
+
+        p.vy += 0.55;
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 10) p.x = 10;
+        if (p.x > levelWidth - p.w - 10) p.x = levelWidth - p.w - 10;
+
+        p.grounded = false;
+        platforms.forEach(plat => {
+            if (p.x + p.w > plat.x && p.x < plat.x + plat.w &&
+                p.y + p.h >= plat.y && p.y + p.h <= plat.y + plat.h + 14 && p.vy >= 0) {
+                p.y = plat.y - p.h;
+                p.vy = 0;
+                p.grounded = true;
+            }
+        });
+
+        if (!upgradeTriggered && p.x >= upgradeCheckpointX) {
+            upgradeTriggered = true;
+            gameState = 'PAUSED';
+            document.getElementById('screen-upgrade').classList.remove('hidden');
+        }
+
+        antidotes.forEach(ant => {
+            if (!ant.collected && rectIntersect(p, ant)) {
+                ant.collected = true;
+                if (ant.type === 'REAL') {
+                    if (p.hearts < 3) {
+                        p.hearts++;
+                        addFloatingText(p.x, p.y - 15, "ANTÍDOTO REAL! +1 ❤️", "#2ecc71");
+                    } else {
+                        addFloatingText(p.x, p.y - 15, "VIDA CHEIA!", "#f1c40f");
+                    }
+                } else {
+                    p.hearts--;
+                    p.invuln = 60;
+                    addFloatingText(p.x, p.y - 15, "PEGADINHA! -1 ❤️", "#e74c3c");
+                }
+                updateHeartsHUD();
+            }
+        });
+
+        obstacles.forEach(obs => {
+            if (rectIntersect(p, obs)) {
+                if (hasCorrectEpi) {
+                    addFloatingText(obs.x, obs.y - 10, `EPI ${epiTier} PROTEGEU! 🛡️`, "#00ffcc");
+                    obs.x = -999;
+                } else if (p.invuln === 0) {
+                    p.hearts--;
+                    p.invuln = 80;
+                    p.vy = -7;
+                    addFloatingText(p.x, p.y - 15, "EPI ERRADO! -1 ❤️", "#ff4757");
+                    updateHeartsHUD();
+                }
+            }
+        });
+
+        if (currentPhase < 5 && p.x >= levelWidth - 110) {
+            gameState = 'PAUSED';
+            openEpiSelection(currentPhase + 1);
+        }
+    });
+
+    if (players.every(p => p.hearts <= 0)) {
+        gameState = 'END';
+        document.getElementById('end-title').textContent = "💀 ACIDENTE DE TRABALHO! FIM DE JOGO";
+        document.getElementById('end-desc').textContent = "Todos os jogadores perderam seus corações. Escolha os EPIs certos na próxima tentativa!";
+        document.getElementById('screen-end').classList.remove('hidden');
+        return;
+    }
+
+    obstacles.forEach(obs => {
+        if (obs.x < -100) return;
+        obs.x += obs.speed * obs.dir;
+        if (Math.abs(obs.x - obs.startX) > obs.range) obs.dir *= -1;
+    });
+
+    if (currentPhase === 5 && boss && boss.hp > 0) {
+        if (boss.hurtTimer > 0) boss.hurtTimer--;
+        boss.x += boss.vx;
+        if (boss.x < 1300 || boss.x > 1850) boss.vx *= -1;
+
+        const leadPlayer = players.find(p => p.hearts > 0);
+        if (leadPlayer && leadPlayer.x > 1220 && !boss.revealed) {
+            boss.revealed = true;
+            gameState = 'PAUSED';
+            document.getElementById('screen-boss-intro').classList.remove('hidden');
+            return;
+        }
+
+        players.forEach(p => {
+            if (p.hearts <= 0) return;
+            if (rectIntersect(p, boss)) {
+                if (p.vy > 0 && p.y + p.h - p.vy <= boss.y + 35) {
+                    if (boss.hurtTimer === 0) {
+                        boss.hp--;
+                        boss.hurtTimer = 45;
+                        p.vy = -11;
+                        addFloatingText(boss.x + 20, boss.y - 20, `GOLPE BIOSSEGURANÇA! (${boss.hp} HP)`, "#f1c40f");
+                        if (boss.hp <= 0) {
+                            gameState = 'END';
+                            document.getElementById('end-title').textContent = "🏆 VITÓRIA! FÁBRICA SEGURA!";
+                            document.getElementById('end-desc').innerHTML = "Vocês derrotaram o <strong>Sr. Risco</strong>, desmascararam o traidor <strong>Supervisor Carlos</strong> e venceram todos os 5 Riscos Ocupacionais!";
+                            document.getElementById('screen-end').classList.remove('hidden');
+                        }
+                    }
+                } else if (p.invuln === 0) {
+                    p.hearts--;
+                    p.invuln = 80;
+                    p.vx = (p.x < boss.x) ? -8 : 8;
+                    p.vy = -6;
+                    addFloatingText(p.x, p.y - 15, "ATAQUE BIOLÓGICO! -1 ❤️", "#e74c3c");
+                    updateHeartsHUD();
+                }
+            }
+        });
+    }
+
+    const activePlayers = players.filter(p => p.hearts > 0);
+    if (activePlayers.length > 0) {
+        const targetX = Math.max(...activePlayers.map(p => p.x)) - 300;
+        cameraX += (targetX - cameraX) * 0.1;
+        if (cameraX < 0) cameraX = 0;
+        if (cameraX > levelWidth - canvas.width) cameraX = levelWidth - canvas.width;
+    }
+
+    floatingTexts.forEach(ft => { ft.y -= 0.7; ft.life--; });
+    floatingTexts = floatingTexts.filter(ft => ft.life > 0);
+}
+
+function rectIntersect(a, b) {
+    return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+}
+
+function draw() {
+    const pData = PHASES[currentPhase] || PHASES[1];
+    const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    grad.addColorStop(0, pData.bgTop);
+    grad.addColorStop(1, pData.bgBottom);
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.save();
+    ctx.translate(-cameraX, 0);
+
+    ctx.fillStyle = "rgba(255,255,255,0.04)";
+    for (let i = 100; i < levelWidth; i += 350) {
+        ctx.fillRect(i, 60, 40, 380);
+        ctx.fillRect(i - 30, 120, 100, 20);
+    }
+
+    platforms.forEach(plat => {
+        ctx.fillStyle = "#34495e";
+        ctx.fillRect(plat.x, plat.y, plat.w, plat.h);
+        ctx.strokeStyle = pData.color;
+        ctx.lineWidth = 3;
+        ctx.strokeRect(plat.x, plat.y, plat.w, plat.h);
+    });
+
+    ctx.fillStyle = upgradeTriggered ? "#f1c40f" : "#cd7f32";
+    ctx.fillRect(upgradeCheckpointX, 380, 45, 60);
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 11px Arial";
+    ctx.fillText("EPI OURO", upgradeCheckpointX - 4, 372);
+
+    if (currentPhase < 5) {
+        ctx.fillStyle = "#2ecc71";
+        ctx.fillRect(levelWidth - 95, 330, 65, 110);
+        ctx.strokeStyle = "#fff";
+        ctx.lineWidth = 3;
+        ctx.strokeRect(levelWidth - 95, 330, 65, 110);
+        ctx.fillStyle = "#fff";
+        ctx.font = "bold 12px Arial";
+        ctx.fillText("SAÍDA ➡️", levelWidth - 88, 320);
+    }
+
+    antidotes.forEach(ant => {
+        if (ant.collected) return;
+        ctx.fillStyle = (ant.type === 'REAL') ? "#2ecc71" : "#1abc9c";
+        ctx.beginPath();
+        ctx.roundRect(ant.x, ant.y + 8, ant.w, ant.h - 8, 6);
+        ctx.fill();
+        ctx.fillStyle = "#ecf0f1";
+        ctx.fillRect(ant.x + 7, ant.y, 12, 8);
+        ctx.fillStyle = "#fff";
+        ctx.font = "14px Arial";
+        ctx.fillText("🧪", ant.x + 4, ant.y + 26);
+    });
+
+    obstacles.forEach(obs => {
+        if (obs.x < -100) return;
+        ctx.fillStyle = pData.color;
+        ctx.beginPath();
+        ctx.arc(obs.x + obs.w/2, obs.y + obs.h/2, obs.w/2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = "#fff";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.fillStyle = "#fff";
+        ctx.font = "20px Arial";
+        const icon = currentPhase === 1 ? "🔥" : currentPhase === 2 ? "☣️" : currentPhase === 3 ? "📦" : currentPhase === 4 ? "⚡" : "🦠";
+        ctx.fillText(icon, obs.x + 10, obs.y + 27);
+    });
+
+    if (currentPhase === 5 && boss && boss.hp > 0) {
+        ctx.fillStyle = (boss.hurtTimer % 4 > 1) ? "#fff" : "#8e44ad";
+        ctx.beginPath();
+        ctx.roundRect(boss.x, boss.y, boss.w, boss.h, 16);
+        ctx.fill();
+        ctx.strokeStyle = "#2ecc71";
+        ctx.lineWidth = 4;
+        ctx.stroke();
+
+        ctx.font = "44px Arial";
+        ctx.fillText("👾", boss.x + 22, boss.y + 65);
+        ctx.fillStyle = "#fff";
+        ctx.font = "bold 13px Arial";
+        ctx.fillText(`SR. RISCO (${boss.hp}/5)`, boss.x - 2, boss.y - 12);
+    }
+
+    players.forEach(p => {
+        if (p.hearts <= 0) return;
+        if (p.invuln > 0 && Math.floor(p.invuln / 5) % 2 === 0) return;
+
+        if (hasCorrectEpi) {
+            ctx.strokeStyle = (epiTier === 'OURO') ? "#f1c40f" : "#cd7f32";
+            ctx.lineWidth = 3;
+            ctx.strokeRect(p.x - 3, p.y - 3, p.w + 6, p.h + 6);
+        }
+
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x, p.y + 14, p.w, p.h - 14);
+        ctx.fillStyle = "#ffdbac";
+        ctx.fillRect(p.x + 4, p.y + 4, p.w - 8, 14);
+        ctx.fillStyle = p.hat;
+        ctx.fillRect(p.x + 2, p.y, p.w, 6);
+
+        ctx.fillStyle = "#fff";
+        ctx.font = "bold 10px Arial";
+        ctx.fillText(p.name, p.x - 2, p.y - 7);
+    });
+
+    floatingTexts.forEach(ft => {
+        ctx.fillStyle = ft.color;
+        ctx.font = "bold 14px Arial";
+        ctx.fillText(ft.text, ft.x, ft.y);
+    });
+
+    ctx.restore();
+}
+
+function gameLoop() {
+    update();
+    draw();
+    requestAnimationFrame(gameLoop);
+}
+
+openEpiSelection(1);
+gameLoop();
+</script>
+</body>
+</html>
