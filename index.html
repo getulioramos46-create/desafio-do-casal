@@ -2,173 +2,138 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desafio do Casual - Mini Jogo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Super Segurança Bros - Início & História</title>
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
         body {
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+            background: radial-gradient(circle at center, #1e272e 0%, #0d1117 100%);
             color: #fff;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            overflow: hidden;
-            touch-action: manipulation;
-        }
-        h1 {
-            margin: 10px 0;
-            font-size: 1.5rem;
-            color: #00ffcc;
+            min-height: 100vh;
+            padding: 20px;
             text-align: center;
         }
-        #game-container {
-            width: 90vw;
-            max-width: 400px;
-            height: 60vh;
-            background: #151522;
-            border: 3px solid #00ffcc;
-            border-radius: 12px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+        .card {
+            background: rgba(20, 28, 36, 0.95);
+            border: 4px solid #f1c40f;
+            border-radius: 16px;
+            max-width: 780px;
+            width: 100%;
+            padding: 30px 24px;
+            box-shadow: 0 0 35px rgba(241, 196, 15, 0.25);
         }
-        .target {
-            width: 50px;
-            height: 50px;
-            background: #ff007f;
-            border-radius: 50%;
-            position: absolute;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            box-shadow: 0 0 10px #ff007f;
-            user-select: none;
-            transition: transform 0.1s;
+        h1 {
+            font-size: clamp(1.6rem, 4.5vw, 2.7rem);
+            color: #f1c40f;
+            text-shadow: 3px 3px #c0392b;
+            margin-bottom: 8px;
         }
-        .target:active {
-            transform: scale(0.9);
-        }
-        .scoreboard {
-            display: flex;
-            justify-content: space-between;
-            width: 90vw;
-            max-width: 400px;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
+        .subtitle {
+            color: #2ecc71;
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
             font-weight: bold;
+            margin-bottom: 20px;
         }
-        #start-btn {
-            margin-top: 15px;
-            padding: 12px 25px;
-            background: #00ffcc;
-            color: #111;
-            border: none;
+        .story-box {
+            background: #161e26;
+            border-left: 5px solid #e67e22;
+            padding: 16px;
             border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,255,204,0.4);
+            text-align: left;
+            margin-bottom: 22px;
+            line-height: 1.55;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            color: #ecf0f1;
         }
-        #start-btn:active {
-            transform: scale(0.95);
+        .chars-row {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 22px;
+        }
+        .char-badge {
+            background: #2c3e50;
+            border: 2px solid #7f8c8d;
+            border-radius: 10px;
+            padding: 12px 18px;
+            flex: 1;
+            min-width: 210px;
+        }
+        .char-badge h3 { color: #f1c40f; margin-bottom: 4px; font-size: 1.05rem; }
+        .char-badge p { font-size: 0.85rem; color: #bdc3c7; }
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 14px 26px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: transform 0.15s, filter 0.2s;
+        }
+        .btn:hover { transform: scale(1.05); filter: brightness(1.1); }
+        .btn-p1 { background: #27ae60; border-color: #2ecc71; }
+        .btn-p2 { background: #2980b9; border-color: #3498db; }
+        .rules {
+            margin-top: 20px;
+            font-size: 0.82rem;
+            color: #95a5a6;
+            border-top: 1px solid #34495e;
+            padding-top: 14px;
         }
     </style>
 </head>
 <body>
 
-    <h1>🎮 Desafio do Casual</h1>
-    <div class="scoreboard">
-        <span>Pontos: <span id="score">0</span></span>
-        <span>Tempo: <span id="timer">30</span>s</span>
+<div class="card">
+    <h1>🦺 SUPER SEGURANÇA BROS</h1>
+    <div class="subtitle">Missão: Riscos Ocupacionais na Fábrica NovaTech</div>
+
+    <div class="story-box">
+        <strong>⚡ ALERTA DE EMERGÊNCIA NA FÁBRICA:</strong><br>
+        O <strong>Técnico de Segurança</strong> e o <strong>Cientista</strong> entraram na planta industrial para uma auditoria de rotina. De repente, ocorre uma <strong>queda brusca de energia</strong> e todos os portões blindados se trancam!<br><br>
+        O <strong>Supervisor Carlos</strong> entra no rádio: <em>"Vou guiar vocês pelos 5 setores até a saída! Escolham os EPIs corretos em cada fase, evoluam de Bronze para Ouro e cuidado com os frascos suspeitos!"</em>
     </div>
 
-    <div id="game-container"></div>
+    <div class="chars-row">
+        <div class="char-badge" style="border-color: #e74c3c;">
+            <h3>👷 Jogador 1: Técnico de Segurança</h3>
+            <p>Macacão Vermelho • Controles PC: Setas + Espaço (ou botões na tela)</p>
+        </div>
+        <div class="char-badge" style="border-color: #2ecc71;">
+            <h3>🔬 Jogador 2: Cientista</h3>
+            <p>Jaleco Verde • Controles PC: Teclas W, A, D + F para pular</p>
+        </div>
+    </div>
 
-    <button id="start-btn" onclick="startGame()">Iniciar Jogo</button>
+    <div class="btn-group">
+        <button class="btn btn-p1" onclick="iniciarJogo(1)">👤 Jogar Solo (1 Jogador)</button>
+        <button class="btn btn-p2" onclick="iniciarJogo(2)">👥 Modo Dupla (2 Jogadores)</button>
+    </div>
 
-    <script>
-        const gameContainer = document.getElementById('game-container');
-        const scoreDisplay = document.getElementById('score');
-        const timerDisplay = document.getElementById('timer');
-        const startBtn = document.getElementById('start-btn');
+    <div class="rules">
+        <strong>5 Fases:</strong> 1. Risco Físico • 2. Risco Químico • 3. Risco Ergonômico • 4. Risco de Acidentes • 5. Risco Biológico (Chefe Final)
+    </div>
+</div>
 
-        let score = 0;
-        let timeLeft = 30;
-        let gameInterval = null;
-        let targetInterval = null;
+<script>
+    function iniciarJogo(qtdJogadores) {
+        window.location.href = `jogo.html?players=${qtdJogadores}`;
+    }
+</script>
 
-        function startGame() {
-            gameContainer.innerHTML = '';
-            score = 0;
-            timeLeft = 30;
-            scoreDisplay.textContent = score;
-            timerDisplay.textContent = timeLeft;
-            startBtn.style.display = 'none';
-
-            gameInterval = setInterval(() => {
-                timeLeft--;
-                timerDisplay.textContent = timeLeft;
-                if (timeLeft <= 0) {
-                    endGame();
-                }
-            }, 1000);
-
-            targetInterval = setInterval(spawnTarget, 800);
-        }
-
-        function spawnTarget() {
-            if (timeLeft <= 0) return;
-
-            const target = document.createElement('div');
-            target.classList.add('target');
-            target.innerHTML = '⭐';
-
-            const maxX = gameContainer.clientWidth - 50;
-            const maxY = gameContainer.clientHeight - 50;
-            const randomX = Math.floor(Math.random() * maxX);
-            const randomY = Math.floor(Math.random() * maxY);
-
-            target.style.left = randomX + 'px';
-            target.style.top = randomY + 'px';
-
-            target.addEventListener('click', () => {
-                score += 10;
-                scoreDisplay.textContent = score;
-                target.remove();
-            });
-
-            target.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                score += 10;
-                scoreDisplay.textContent = score;
-                target.remove();
-            });
-
-            gameContainer.appendChild(target);
-
-            setTimeout(() => {
-                if (target.parentElement) {
-                    target.remove();
-                }
-            }, 1200);
-        }
-
-        function endGame() {
-            clearInterval(gameInterval);
-            clearInterval(targetInterval);
-            gameContainer.innerHTML = `<div style="display:flex; align-items:center; justify-content:center; height:100%; flex-direction:column; text-align:center;">
-                <h2>Fim de Jogo! 🏆</h2>
-                <p style="font-size: 1.2rem; margin: 10px 0;">Sua pontuação: <strong>${score}</strong></p>
-            </div>`;
-            startBtn.style.display = 'block';
-            startBtn.textContent = 'Jogar Novamente';
-        }
-    </script>
 </body>
 </html>
+
